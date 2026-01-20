@@ -17,7 +17,7 @@ export default function InviteAccept() {
 
   const acceptInvitation = async () => {
     try {
-      setLoading(true);
+      setStatus('loading');
       
       // Check if user is logged in
       const authToken = localStorage.getItem('token');

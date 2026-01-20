@@ -18,7 +18,7 @@ export default function ScanDetails() {
     fetchScanRun();
     
     // Only poll if scan is running
-    let interval: NodeJS.Timeout | null = null;
+    let interval: any = null;
     if (scanRun?.status === 'running' || scanRun?.status === 'pending') {
       interval = setInterval(fetchScanRun, 3000);
     }

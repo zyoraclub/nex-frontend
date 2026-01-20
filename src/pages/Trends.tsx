@@ -196,8 +196,8 @@ export default function Trends() {
           </div>
           <div className="bar-chart">
             {Object.entries(trends.summary.severity_distribution).map(([severity, count]: any, index) => {
-              const maxCount = Math.max(...Object.values(trends.summary.severity_distribution as any));
-              const percentage = maxCount > 0 ? (count / maxCount) * 100 : 0;
+              const maxCount = Math.max(...(Object.values(trends.summary.severity_distribution) as number[]));
+              const percentage = maxCount > 0 ? ((count as number) / maxCount) * 100 : 0;
               
               return (
                 <div key={severity} className="bar-item" style={{ animationDelay: `${index * 0.1}s` }}>

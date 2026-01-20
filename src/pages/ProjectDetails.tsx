@@ -268,9 +268,9 @@ export default function ProjectDetails() {
 
             {aibom?.status === 'completed' && aibom.assets && (
               <div className="assets-container">
-                {aibom.graph && (
+                {(aibom as any).graph && (
                   <div className="graph-section">
-                    <AIBOMGraph graphData={aibom.graph} />
+                    <AIBOMGraph graphData={(aibom as any).graph} />
                   </div>
                 )}
 
