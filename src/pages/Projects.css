@@ -1,0 +1,153 @@
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.projects-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+}
+
+.projects-subtitle {
+  font-size: 14px;
+  color: #888888;
+  margin: 0;
+}
+
+.projects-filter {
+  margin-bottom: 24px;
+}
+
+.workspace-filter {
+  padding: 8px 12px;
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 13px;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.workspace-filter:focus {
+  outline: none;
+  border-color: #fec76f;
+}
+
+.projects-loading,
+.projects-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #888888;
+  font-size: 14px;
+}
+
+.projects-empty p {
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.project-card {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.2s;
+}
+
+.project-card:hover {
+  border-color: #2a2a2a;
+  transform: translateY(-2px);
+}
+
+.project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.project-card-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  flex: 1;
+}
+
+.project-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.project-description {
+  color: #888888;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+}
+
+.project-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #1a1a1a;
+  font-size: 12px;
+}
+
+.project-source {
+  padding: 3px 8px;
+  background: rgba(254, 199, 111, 0.1);
+  color: #fec76f;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.project-repo {
+  color: #666666;
+}
+
+.modal-content select {
+  width: 100%;
+  padding: 10px 12px;
+  background: #000000;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 13px;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888888' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.modal-content select:hover {
+  border-color: #2a2a2a;
+}
+
+.modal-content select:focus {
+  outline: none;
+  border-color: #fec76f;
+}
+
+.modal-content select option {
+  background: #0a0a0a;
+  color: #ffffff;
+  padding: 10px;
+}

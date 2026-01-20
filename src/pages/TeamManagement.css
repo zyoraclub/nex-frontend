@@ -1,0 +1,325 @@
+.team-loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 13px;
+  color: #888888;
+}
+
+.team-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.team-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+}
+
+.team-title h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.btn-invite {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #fec76f;
+  color: #0a0a0a;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-invite:hover {
+  background: #ffd98f;
+  transform: translateY(-1px);
+}
+
+.team-section {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+}
+
+.members-list,
+.invitations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.member-card,
+.invitation-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px;
+  background: #000000;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.member-card:hover,
+.invitation-card:hover {
+  border-color: #2a2a2a;
+}
+
+.member-info,
+.invitation-info {
+  flex: 1;
+}
+
+.member-email,
+.invitation-email {
+  font-size: 13px;
+  font-weight: 500;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.member-meta,
+.invitation-meta {
+  font-size: 11px;
+  color: #666666;
+}
+
+.member-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.role-select,
+.form-select {
+  padding: 6px 12px;
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.role-select:hover,
+.form-select:hover {
+  border-color: #fec76f;
+}
+
+.btn-remove,
+.btn-cancel {
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid #ef4444;
+  border-radius: 4px;
+  color: #ef4444;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-remove:hover,
+.btn-cancel:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.btn-resend {
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid #fec76f;
+  border-radius: 4px;
+  color: #fec76f;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-resend:hover {
+  background: rgba(254, 199, 111, 0.1);
+}
+
+.invitation-status {
+  flex-shrink: 0;
+}
+
+.invitation-status-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: #888888;
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+}
+
+.modal-close:hover {
+  color: #ffffff;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #888888;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: #000000;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #fec76f;
+}
+
+.role-descriptions {
+  margin-top: 16px;
+  padding: 12px;
+  background: #000000;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+}
+
+.role-desc {
+  font-size: 11px;
+  color: #888888;
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+.role-desc:last-child {
+  margin-bottom: 0;
+}
+
+.role-desc strong {
+  color: #fec76f;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px;
+  border-top: 1px solid #1a1a1a;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  color: #888888;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  border-color: #fec76f;
+  color: #ffffff;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #fec76f;
+  color: #0a0a0a;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background: #ffd98f;
+}
