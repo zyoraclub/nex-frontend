@@ -7,6 +7,7 @@ interface Integration {
   integration_name: string;
   status: string;
   config: any;
+  installation_id?: number;
   created_at: string;
   updated_at: string;
 }
@@ -15,6 +16,7 @@ interface GitHubIntegrationCreate {
   integration_name: string;
   access_token: string;
   repositories: string[];
+  installation_id?: number | null;
 }
 
 interface GitLabIntegrationCreate {
