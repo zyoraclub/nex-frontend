@@ -32,12 +32,20 @@ export default function Login() {
         return;
       }
       
-      // Get user info to get org slug
+      // Get user info to check profile completion
       const userResponse = await authAPI.getMe();
       const orgSlug = userResponse.data.organization_slug;
+      const org = userResponse.data.organization;
+      
+      // Check if profile is complete (required fields: mobile, category, domain, country)
+      const isProfileComplete = org?.mobile && org?.category && org?.domain && org?.country;
       
       setSuccess('✓ Login successful! Redirecting...');
-      setTimeout(() => navigate(`/${orgSlug}/dashboard`), 1500);
+      if (!isProfileComplete) {
+        setTimeout(() => navigate(`/${orgSlug}/profile?complete=true`), 1500);
+      } else {
+        setTimeout(() => navigate(`/${orgSlug}/dashboard`), 1500);
+      }
     } catch (err: any) {
       const detail = err.response?.data?.detail;
       if (Array.isArray(detail)) {

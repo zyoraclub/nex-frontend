@@ -2,6 +2,27 @@
   max-width: 900px;
 }
 
+.completion-banner {
+  background: linear-gradient(135deg, #fec76f 0%, #ff9a3c 100%);
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  color: #000;
+}
+
+.completion-banner strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.completion-banner p {
+  font-size: 12px;
+  margin: 0;
+  opacity: 0.9;
+}
+
 .org-header {
   display: flex;
   justify-content: space-between;

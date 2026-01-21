@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams, useParams } from 'react-router-dom';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { organizationAPI } from '../services/organizationAPI';
 import { GrEdit } from 'react-icons/gr';
@@ -8,8 +9,13 @@ const CATEGORIES = ['Startup', 'Enterprise', 'Government', 'Non-Profit', 'Educat
 const DOMAINS = ['Finance', 'Technology', 'Government Agency', 'Agriculture', 'Healthcare', 'Manufacturing', 'Retail', 'Other'];
 
 export default function Organization() {
+  const navigate = useNavigate();
+  const { orgSlug } = useParams();
+  const [searchParams] = useSearchParams();
+  const isCompletionRequired = searchParams.get('complete') === 'true';
+  
   const [orgData, setOrgData] = useState<any>(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(isCompletionRequired);
   const [formData, setFormData] = useState({
     mobile: '',
     category: '',
@@ -61,11 +67,21 @@ export default function Organization() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (isCompletionRequired && (!formData.mobile || !formData.category || !formData.domain || !formData.country)) {
+      alert('Please fill in all required fields');
+      return;
+    }
+    
     setLoading(true);
     try {
       await organizationAPI.updateMyOrganization(formData);
       await fetchOrganization();
       setIsEditing(false);
+      
+      if (isCompletionRequired) {
+        navigate(`/${orgSlug}/dashboard`);
+      }
     } catch (err) {
       console.error('Failed to update organization');
     } finally {
@@ -78,6 +94,12 @@ export default function Organization() {
   return (
     <DashboardLayout>
       <div className="org-profile">
+        {isCompletionRequired && (
+          <div className="completion-banner">
+            <strong>Complete Your Profile</strong>
+            <p>Please fill in the required information to continue</p>
+          </div>
+        )}
         <div className="org-header">
           <h1>Organization Profile</h1>
           {!isEditing && (
@@ -227,11 +249,13 @@ export default function Organization() {
             </div>
 
             <div className="form-actions">
-              <button type="button" className="cancel-btn" onClick={() => setIsEditing(false)}>
-                Cancel
-              </button>
+              {!isCompletionRequired && (
+                <button type="button" className="cancel-btn" onClick={() => setIsEditing(false)}>
+                  Cancel
+                </button>
+              )}
               <button type="submit" className="save-btn" disabled={loading}>
-                {loading ? 'Saving...' : 'Save Changes'}
+                {loading ? 'Saving...' : isCompletionRequired ? 'Complete Profile' : 'Save Changes'}
               </button>
             </div>
           </form>
