@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import Organization from './pages/Organization';
 import Workspaces from './pages/Workspaces';
 import Integrations from './pages/Integrations';
+import GitHubIntegration from './pages/GitHubIntegration';
 import GitHubDetails from './pages/GitHubDetails';
 import GitHubCallback from './pages/GitHubCallback';
 import Projects from './pages/Projects';
@@ -67,6 +68,7 @@ function App() {
         <Route path="/:orgSlug/projects/:projectSlug/compare" element={<ScanComparison />} />
         <Route path="/:orgSlug/projects/:projectSlug/scans/:scanId/reports" element={<Reports />} />
         <Route path="/:orgSlug/integrations" element={<Integrations />} />
+        <Route path="/:orgSlug/integrations/github" element={<GitHubIntegration />} />
         <Route path="/:orgSlug/integrations/slack" element={<SlackIntegration />} />
         <Route path="/:orgSlug/integrations/pagerduty" element={<PagerDutyIntegration />} />
         <Route path="/:orgSlug/integrations/aws-sagemaker" element={<AWSSageMakerIntegration />} />

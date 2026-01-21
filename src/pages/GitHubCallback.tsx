@@ -11,6 +11,7 @@ export default function GitHubCallback() {
     const handleCallback = async () => {
       const token = searchParams.get('token');
       const state = searchParams.get('state');
+      const installationId = searchParams.get('installation_id');
       const savedState = localStorage.getItem('github_oauth_state');
 
       if (!token || state !== savedState) {
@@ -23,12 +24,14 @@ export default function GitHubCallback() {
         await integrationAPI.connectGitHub({
           integration_name: 'GitHub OAuth',
           access_token: token,
-          repositories: []
+          repositories: [],
+          installation_id: installationId ? parseInt(installationId) : null
         });
         
         localStorage.removeItem('github_oauth_state');
         setStatus('Connected successfully!');
         const orgSlug = localStorage.getItem('orgSlug') || 'org';
+        // Redirect to GitHub integration page instead of generic integrations
         setTimeout(() => navigate(`/${orgSlug}/integrations/github`), 1000);
       } catch (err) {
         setStatus('Failed to save integration');
