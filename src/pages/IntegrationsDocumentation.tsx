@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaGithub, FaGitlab, FaBitbucket, FaAws, FaSlack, FaJira } from 'react-icons/fa';
+import { FaGithub, FaGitlab, FaBitbucket, FaAws, FaSlack, FaJira, FaDocker, FaGoogle } from 'react-icons/fa';
 import { SiHuggingface, SiPagerduty } from 'react-icons/si';
 import { VscAzureDevops } from 'react-icons/vsc';
 import './IntegrationsDocumentation.css';
@@ -12,15 +12,31 @@ export default function IntegrationsDocumentation() {
       name: 'GitHub',
       icon: <FaGithub />,
       color: '#fff',
-      description: 'Connect GitHub repositories for code scanning and AIBOM generation',
+      description: 'Connect GitHub repositories for code scanning, AIBOM generation, and automated PR creation',
       setupSteps: [
         'Go to Integrations page and click "Connect GitHub"',
+        'Choose OAuth (personal) or GitHub App (organization)',
         'Authorize Nexula to access your repositories',
+        'For GitHub App: Install app on organization/repositories',
         'Select repositories you want to scan',
         'Click "Connect" to complete setup'
       ],
-      features: ['Repository scanning', 'AIBOM generation', 'Dependency analysis', 'Security scanning'],
-      permissions: ['Read repository contents', 'Access repository metadata']
+      features: [
+        'Repository scanning',
+        'AIBOM generation',
+        'Dependency analysis',
+        'Security scanning',
+        '🎉 NEW: Auto-PR creation after scans',
+        '🎉 NEW: PR comments with scan results',
+        '🎉 NEW: GitHub Checks integration'
+      ],
+      permissions: [
+        'Read repository contents',
+        'Access repository metadata',
+        'Create pull requests (for auto-remediation)',
+        'Write checks (GitHub App only)',
+        'Comment on pull requests (GitHub App only)'
+      ]
     },
     {
       name: 'GitLab',
@@ -77,6 +93,51 @@ export default function IntegrationsDocumentation() {
       ],
       features: ['Model discovery', 'Endpoint scanning', 'Training job analysis', 'Security assessment'],
       permissions: ['SageMaker:ListModels', 'SageMaker:DescribeModel', 'SageMaker:ListEndpoints']
+    },
+    {
+      name: 'AWS ECR',
+      icon: <FaDocker />,
+      color: '#FF9900',
+      description: 'Scan container images for vulnerabilities in Amazon ECR',
+      setupSteps: [
+        'Navigate to AWS ECR integration page',
+        'Provide AWS Access Key ID and Secret Access Key',
+        'Select AWS region',
+        'Click "Connect" to test connection',
+        'Discover repositories and scan images'
+      ],
+      features: ['Repository discovery', 'Image scanning', 'Vulnerability detection', 'Scan findings analysis'],
+      permissions: ['ecr:DescribeRepositories', 'ecr:DescribeImages', 'ecr:DescribeImageScanFindings', 'ecr:StartImageScan']
+    },
+    {
+      name: 'Google Artifact Registry',
+      icon: <FaGoogle />,
+      color: '#4285F4',
+      description: 'Manage and scan container images in Google Cloud',
+      setupSteps: [
+        'Go to Google Artifact Registry integration',
+        'Create service account in GCP Console',
+        'Grant "Artifact Registry Reader" role',
+        'Download service account JSON key',
+        'Paste JSON and connect'
+      ],
+      features: ['Repository discovery', 'Package scanning', 'Version tracking', 'Multi-region support'],
+      permissions: ['artifactregistry.repositories.list', 'artifactregistry.packages.list', 'artifactregistry.versions.list']
+    },
+    {
+      name: 'Azure Container Registry',
+      icon: <VscAzureDevops />,
+      color: '#0078D4',
+      description: 'Manage and scan container images in Azure',
+      setupSteps: [
+        'Navigate to Azure Container Registry integration',
+        'Create service principal in Azure Portal',
+        'Assign "AcrPull" role to service principal',
+        'Provide registry name, tenant ID, client ID, and secret',
+        'Connect and discover repositories'
+      ],
+      features: ['Repository discovery', 'Tag management', 'Manifest inspection', 'Image deletion'],
+      permissions: ['AcrPull', 'AcrDelete (optional)']
     },
     {
       name: 'HuggingFace',

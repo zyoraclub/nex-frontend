@@ -1,0 +1,198 @@
+.attack-simulation-content {
+  padding: 40px;
+  background: #000;
+  min-height: 100vh;
+}
+
+.attack-simulation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.attack-simulation-header h1 {
+  color: #fec76f;
+  font-size: 36px;
+  margin: 0 0 8px 0;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 20px rgba(254, 199, 111, 0.3);
+}
+
+.attack-simulation-header p {
+  color: #888;
+  opacity: 0.9;
+  margin: 0;
+  font-size: 14px;
+}
+
+.btn-reset {
+  background: rgba(254, 199, 111, 0.1);
+  color: #fec76f;
+  border: 1px solid #fec76f;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.btn-reset:hover {
+  background: rgba(254, 199, 111, 0.2);
+  box-shadow: 0 0 20px rgba(254, 199, 111, 0.3);
+}
+
+.attack-types-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.attack-card {
+  background: rgba(254, 199, 111, 0.03);
+  border: 1px solid rgba(254, 199, 111, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.attack-card:hover {
+  background: rgba(254, 199, 111, 0.05);
+  box-shadow: 0 8px 32px rgba(254, 199, 111, 0.2);
+  transform: translateY(-4px);
+}
+
+.attack-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.attack-icon {
+  font-size: 48px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.attack-card h3 {
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  font-size: 20px;
+}
+
+.attack-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.severity-badge {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+}
+
+.severity-badge.critical {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff0000;
+  border: 1px solid #ff0000;
+}
+
+.severity-badge.high {
+  background: rgba(255, 153, 0, 0.2);
+  color: #ff9900;
+  border: 1px solid #ff9900;
+}
+
+.duration-badge {
+  background: rgba(254, 199, 111, 0.1);
+  color: #fec76f;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  border: 1px solid rgba(254, 199, 111, 0.3);
+}
+
+.attack-description {
+  color: #888;
+  opacity: 0.9;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.btn-simulate {
+  width: 100%;
+  background: linear-gradient(135deg, #fec76f 0%, #ffd89b 100%);
+  color: #000;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-simulate:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(254, 199, 111, 0.5);
+}
+
+.btn-simulate:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.attack-theater-container {
+  margin-top: 24px;
+}
+
+.attack-info-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.info-card {
+  background: rgba(254, 199, 111, 0.03);
+  border: 1px solid rgba(254, 199, 111, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.info-card h3 {
+  color: #fec76f;
+  margin: 0 0 12px 0;
+  font-size: 18px;
+}
+
+.info-card p {
+  color: #888;
+  opacity: 0.9;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .attack-simulation-content {
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .attack-types-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .attack-simulation-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}

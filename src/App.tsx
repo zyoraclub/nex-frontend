@@ -34,15 +34,24 @@ import Compliance from './pages/Compliance';
 import SlackIntegration from './pages/SlackIntegration';
 import PagerDutyIntegration from './pages/PagerDutyIntegration';
 import AWSSageMakerIntegration from './pages/AWSSageMakerIntegration';
+import AWSECRIntegration from './pages/AWSECRIntegration';
+import GoogleArtifactRegistryIntegration from './pages/GoogleArtifactRegistryIntegration';
+import AzureContainerRegistryIntegration from './pages/AzureContainerRegistryIntegration';
 import HuggingFaceIntegration from './pages/HuggingFaceIntegration';
 import HuggingFaceDetails from './pages/HuggingFaceDetails';
 import ApiKeys from './pages/ApiKeys';
 import ApiDocumentation from './pages/ApiDocumentation';
 import IntegrationsDocumentation from './pages/IntegrationsDocumentation';
+import { SecurityCopilot } from './components/copilot/SecurityCopilot';
+import AttackSimulation from './pages/AttackSimulation';
+import Scoring from './pages/Scoring';
+import Fingerprinting from './pages/Fingerprinting';
+import SecurityGate from './pages/SecurityGate';
 
 function App() {
   return (
     <BrowserRouter>
+      <SecurityCopilot />
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/api-docs" element={<ApiDocumentation />} />
@@ -63,8 +72,12 @@ function App() {
         <Route path="/:orgSlug/settings/notifications" element={<NotificationSettings />} />
         <Route path="/:orgSlug/projects" element={<Projects />} />
         <Route path="/:orgSlug/projects/:projectSlug" element={<ProjectDetails />} />
+        <Route path="/:orgSlug/projects/:projectSlug/scoring" element={<Scoring />} />
+        <Route path="/:orgSlug/projects/:projectSlug/fingerprinting" element={<Fingerprinting />} />
+        <Route path="/:orgSlug/projects/:projectSlug/security-gate" element={<SecurityGate />} />
         <Route path="/:orgSlug/projects/:projectSlug/scans" element={<ScanHistory />} />
         <Route path="/:orgSlug/projects/:projectSlug/scans/:scanId" element={<ScanDetails />} />
+        <Route path="/:orgSlug/projects/:projectSlug/attack-simulation" element={<AttackSimulation />} />
         <Route path="/:orgSlug/projects/:projectSlug/compare" element={<ScanComparison />} />
         <Route path="/:orgSlug/projects/:projectSlug/scans/:scanId/reports" element={<Reports />} />
         <Route path="/:orgSlug/integrations" element={<Integrations />} />
@@ -72,6 +85,9 @@ function App() {
         <Route path="/:orgSlug/integrations/slack" element={<SlackIntegration />} />
         <Route path="/:orgSlug/integrations/pagerduty" element={<PagerDutyIntegration />} />
         <Route path="/:orgSlug/integrations/aws-sagemaker" element={<AWSSageMakerIntegration />} />
+        <Route path="/:orgSlug/integrations/aws-ecr" element={<AWSECRIntegration />} />
+        <Route path="/:orgSlug/integrations/google-artifact-registry" element={<GoogleArtifactRegistryIntegration />} />
+        <Route path="/:orgSlug/integrations/azure-container-registry" element={<AzureContainerRegistryIntegration />} />
         <Route path="/:orgSlug/integrations/huggingface" element={<HuggingFaceDetails />} />
         <Route path="/:orgSlug/integrations/github-actions" element={<GitHubActionsIntegration />} />
         <Route path="/:orgSlug/integrations/gitlab" element={<GitLabIntegration />} />

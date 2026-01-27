@@ -9,6 +9,7 @@ export default function VerifyOTP() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
   const email = localStorage.getItem('email') || '';
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,6 +44,27 @@ export default function VerifyOTP() {
     }
   };
 
+  const handleResend = async () => {
+    if (!email) {
+      setError('Email not found. Please register again.');
+      return;
+    }
+
+    setResending(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      // Call resend OTP endpoint (we'll create this)
+      await authAPI.resendOTP(email);
+      setSuccess('✓ New OTP sent to your email!');
+    } catch (err: any) {
+      setError('Failed to resend OTP. Please try again.');
+    } finally {
+      setResending(false);
+    }
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -71,7 +93,13 @@ export default function VerifyOTP() {
         </form>
 
         <p className="auth-link">
-          Didn't receive code? <a href="/register">Resend</a>
+          Didn't receive code? <button 
+            onClick={handleResend} 
+            disabled={resending}
+            style={{ background: 'none', border: 'none', color: '#4F46E5', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+          >
+            {resending ? 'Sending...' : 'Resend'}
+          </button>
         </p>
       </div>
     </div>

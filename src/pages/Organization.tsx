@@ -31,6 +31,16 @@ export default function Organization() {
   }, []);
 
   useEffect(() => {
+    // If profile completion is required but profile is already complete, redirect to dashboard
+    if (isCompletionRequired && orgData) {
+      const isProfileComplete = orgData.mobile && orgData.category && orgData.domain && orgData.country;
+      if (isProfileComplete) {
+        navigate(`/${orgSlug}/dashboard`, { replace: true });
+      }
+    }
+  }, [orgData, isCompletionRequired, orgSlug, navigate]);
+
+  useEffect(() => {
     if (isEditing && !formData.country) {
       detectCountry();
     }

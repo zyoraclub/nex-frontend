@@ -82,6 +82,7 @@ const ApiDocumentation: React.FC = () => {
           { id: 'init-project', label: 'Initialize Project' },
           { id: 'generate-aibom', label: 'Generate AIBOM' },
           { id: 'run-scan', label: 'Run Security Scan' },
+          { id: 'cli-remediation', label: 'Interactive Remediation (NEW)' },
           { id: 'available-scanners', label: 'Available Scanners' },
           { id: 'jenkins-integration', label: 'Jenkins Integration' },
           { id: 'github-actions', label: 'GitHub Actions' },
@@ -312,6 +313,8 @@ nexula init`} />
                 <h3>Run Security Scan</h3>
               <p>Run comprehensive security scan:</p>
               <CodeBlock code={`nexula scan run --wait`} />
+              <p><span style={{background: '#fec76f', color: '#000', padding: '2px 6px', borderRadius: '3px', fontSize: '11px', fontWeight: 'bold'}}>NEW v2.0</span> Run with interactive remediation:</p>
+              <CodeBlock code={`nexula scan run --interactive`} />
               <p>Run specific scanners:</p>
               <CodeBlock code={`nexula scan run --scanners sast --scanners cve --wait`} />
               <p>Check scan status:</p>
@@ -322,6 +325,19 @@ nexula init`} />
               <CodeBlock code={`nexula scan results <scan-id> --format json`} />
               <p>List all scans:</p>
               <CodeBlock code={`nexula scan list`} />
+              
+              <div style={{marginTop: '20px', padding: '16px', background: 'rgba(254, 199, 111, 0.1)', border: '1px solid rgba(254, 199, 111, 0.3)', borderRadius: '6px'}}>
+                <h4 style={{margin: '0 0 12px 0', color: '#fec76f', fontSize: '14px'}}>🎉 NEW: Interactive Remediation (v2.0)</h4>
+                <p style={{margin: '0 0 8px 0', fontSize: '13px'}}>Apply automated fixes and get AI-powered suggestions:</p>
+                <CodeBlock code={`# Launch interactive wizard
+nexula scan remediate <scan-id>
+
+# Apply automated fix
+nexula scan fix <finding-id> --preview
+
+# Get AI suggestions
+nexula scan suggest <finding-id>`} />
+              </div>
             </div>
 
               <div className="doc-card" id="available-scanners">
@@ -338,6 +354,79 @@ nexula init`} />
                 <li><code>container_registry</code> - Container Registry Security</li>
                 <li><code>license</code> - License Compliance</li>
               </ul>
+            </div>
+
+              <div className="doc-card" id="cli-remediation">
+                <h3>🎉 Interactive Remediation (v2.0)</h3>
+                <div style={{padding: '12px', background: 'rgba(254, 199, 111, 0.1)', border: '1px solid rgba(254, 199, 111, 0.3)', borderRadius: '6px', marginBottom: '16px'}}>
+                  <p style={{margin: 0, fontSize: '13px', color: '#fec76f'}}>✨ New in CLI v2.0: Interactive vulnerability remediation with AI-powered suggestions</p>
+                </div>
+                
+                <h4>Backend APIs</h4>
+                <p>The CLI uses these new remediation endpoints:</p>
+                <ul>
+                  <li><code>GET /api/v1/remediation/findings/{'{finding_id}'}/preview</code> - Preview fix before applying</li>
+                  <li><code>POST /api/v1/remediation/findings/{'{finding_id}'}/fix</code> - Apply automated fix</li>
+                  <li><code>GET /api/v1/remediation/findings/{'{finding_id}'}/suggestions</code> - Get AI suggestions</li>
+                </ul>
+                
+                <h4>Interactive Wizard</h4>
+                <p>Launch step-by-step remediation wizard after scan completion:</p>
+                <CodeBlock code={`nexula scan remediate <scan-id>
+
+# Interactive prompts:
+# [F] Fix automatically
+# [S] Suggest fix
+# [I] Ignore
+# [N] Next
+# [Q] Quit`} />
+                
+                <h4>Apply Automated Fix</h4>
+                <p>Apply fix with preview:</p>
+                <CodeBlock code={`nexula scan fix <finding-id> --preview`} />
+                <p>Apply fix without preview:</p>
+                <CodeBlock code={`nexula scan fix <finding-id>`} />
+                
+                <h4>AI-Powered Suggestions</h4>
+                <p>Get multiple fix approaches with code examples:</p>
+                <CodeBlock code={`nexula scan suggest <finding-id>`} />
+                
+                <h4>Performance Optimizations</h4>
+                <ul>
+                  <li>✅ File-based caching (5min TTL) - 60-70% faster</li>
+                  <li>✅ Batch operations for multiple fixes</li>
+                  <li>✅ Automatic cache invalidation</li>
+                  <li>✅ Offline mode for cached results</li>
+                </ul>
+                
+                <h4>Features</h4>
+                <ul>
+                  <li>✅ Syntax-highlighted code diffs</li>
+                  <li>✅ Batch fixing for multiple vulnerabilities</li>
+                  <li>✅ AI confidence scores and effort estimates</li>
+                  <li>✅ Step-by-step remediation instructions</li>
+                  <li>✅ Preview changes before applying</li>
+                  <li>✅ Rich terminal UI with colors and animations</li>
+                  <li>✅ Automatic backups before applying fixes</li>
+                </ul>
+                
+                <h4>Example Workflow</h4>
+                <CodeBlock code={`# 1. Run scan with interactive mode
+nexula scan run --interactive
+
+# 2. Review findings one by one
+# ⚠ Found 12 vulnerabilities
+# ✓ 8 can be auto-fixed
+# Fix all? [Y/n]
+
+# 3. Or remediate existing scan
+nexula scan remediate 123
+
+# 4. Get AI suggestions for specific finding
+nexula scan suggest 456
+
+# 5. Clear cache for fresh data
+nexula cache clear`} />
             </div>
 
               <div className="doc-card" id="jenkins-integration">

@@ -38,6 +38,9 @@ export const authAPI = {
   verifyOTP: (data: { email: string; otp: string }) =>
     api.post('/auth/verify-otp', data),
   
+  resendOTP: (email: string) =>
+    api.post('/auth/resend-otp', { email }),
+  
   login: (data: { email: string; password: string }) =>
     api.post('/auth/login', data),
   

@@ -315,3 +315,35 @@
 .graph-section {
   margin-bottom: 30px;
 }
+
+.project-details-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-attack-simulation {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-attack-simulation:hover {
+  background: linear-gradient(135deg, #ff3333 0%, #ff0000 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
+}
+
+.btn-attack-simulation:active {
+  transform: translateY(0);
+}

@@ -7,6 +7,9 @@ import { integrationAPI } from '../services/integrationAPI';
 import type { Project } from '../services/projectAPI';
 import type { Workspace } from '../services/workspaceAPI';
 import { GrAdd, GrEdit, GrTrash, GrClose } from 'react-icons/gr';
+import { SiSpringsecurity } from 'react-icons/si';
+import { RiTeamFill } from 'react-icons/ri';
+import { SecurityScoreBadge } from '../components/SecurityScoreBadge';
 import './Projects.css';
 
 export default function Projects() {
@@ -259,14 +262,16 @@ export default function Projects() {
                 onClick={() => navigate(`/${orgSlug}/${workspaceSlug}/policies`)}
                 style={{ background: 'transparent', border: '1px solid #1a1a1a', color: '#ffffff' }}
               >
-                <span>🛡️ Policies</span>
+                <SiSpringsecurity size={14} />
+                <span>Policies</span>
               </button>
               <button 
                 className="btn-create" 
                 onClick={() => navigate(`/${orgSlug}/${workspaceSlug}/team`)}
                 style={{ background: 'transparent', border: '1px solid #1a1a1a', color: '#ffffff' }}
               >
-                <span>👥 Team</span>
+                <RiTeamFill size={14} />
+                <span>Team</span>
               </button>
             </>
           )}
@@ -320,6 +325,7 @@ export default function Projects() {
                 <span className="project-source">{project.source_type}</span>
                 {project.repository_name && <span className="project-repo">{project.repository_name}</span>}
               </div>
+              <SecurityScoreBadge projectId={project.id} projectSlug={getProjectSlug(project.project_name)} />
             </div>
           ))}
         </div>

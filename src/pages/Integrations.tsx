@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { SiGithubactions, SiHuggingface } from 'react-icons/si';
 import { VscAzureDevops } from 'react-icons/vsc';
-import { FaGithub, FaGitlab, FaSlack, FaAws } from 'react-icons/fa';
+import { FaGithub, FaGitlab, FaSlack, FaAws, FaDocker, FaGoogle } from 'react-icons/fa';
 import { IoLogoBitbucket } from 'react-icons/io';
 import { SiJira, SiPagerduty } from 'react-icons/si';
 
@@ -110,6 +110,36 @@ export default function Integrations() {
       path: `/${orgSlug}/integrations/aws-sagemaker`,
       enabled: true,
       status: 'ML Platform'
+    },
+    {
+      id: 'aws-ecr',
+      name: 'AWS ECR',
+      description: 'Scan container images for vulnerabilities in Amazon ECR',
+      Icon: FaDocker,
+      color: '#FF9900',
+      path: `/${orgSlug}/integrations/aws-ecr`,
+      enabled: true,
+      status: 'Container Registry'
+    },
+    {
+      id: 'google-artifact-registry',
+      name: 'Google Artifact Registry',
+      description: 'Manage and scan container images in Google Cloud',
+      Icon: FaGoogle,
+      color: '#4285F4',
+      path: `/${orgSlug}/integrations/google-artifact-registry`,
+      enabled: true,
+      status: 'Container Registry'
+    },
+    {
+      id: 'azure-container-registry',
+      name: 'Azure Container Registry',
+      description: 'Manage and scan container images in Azure',
+      Icon: VscAzureDevops,
+      color: '#0078D4',
+      path: `/${orgSlug}/integrations/azure-container-registry`,
+      enabled: true,
+      status: 'Container Registry'
     },
     {
       id: 'huggingface',

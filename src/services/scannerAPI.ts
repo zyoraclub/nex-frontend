@@ -100,6 +100,21 @@ const scannerAPI = {
   runSASTScan: (projectId: number) =>
     api.post<ScannerRun>(`/scanner/scan/sast/${projectId}`),
 
+  runMLSecurityScan: (projectId: number) =>
+    api.post<ScannerRun>(`/scanner/scan/ml-security/${projectId}`),
+
+  runDatasetPoisoningScan: (projectId: number) =>
+    api.post<ScannerRun>(`/scanner/scan/dataset-poisoning/${projectId}`),
+
+  runModelPoisoningScan: (projectId: number) =>
+    api.post<ScannerRun>(`/scanner/scan/model-poisoning/${projectId}`),
+
+  runAdversarialRobustnessScan: (projectId: number) =>
+    api.post<ScannerRun>(`/scanner/scan/adversarial-robustness/${projectId}`),
+
+  runZeroDayScan: (projectId: number) =>
+    api.post<ScannerRun>(`/scanner/scan/zero-day/${projectId}`),
+
   getScanRuns: (projectId: number, limit: number = 10) =>
     api.get<ScannerRun[]>(`/scanner/scan/runs/${projectId}?limit=${limit}`),
 

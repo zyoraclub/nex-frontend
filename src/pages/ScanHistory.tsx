@@ -20,8 +20,8 @@ export default function ScanHistory() {
   const [activeScanId, setActiveScanId] = useState<number | null>(null);
   const [activeScanRun, setActiveScanRun] = useState<ScannerRun | null>(null);
   const [certInEnabled, setCertInEnabled] = useState(false);
-  const [scanType, setScanType] = useState<'unified' | 'vulnerability' | 'llm_rag' | 'model_provenance' | 'container' | 'sast'>('unified');
-  const [filterScanType, setFilterScanType] = useState<'all' | 'unified' | 'vulnerability' | 'llm_rag' | 'model_provenance' | 'container' | 'sast'>('all');
+  const [scanType, setScanType] = useState<'unified' | 'vulnerability' | 'llm_rag' | 'model_provenance' | 'container' | 'sast' | 'ml_security' | 'dataset_poisoning' | 'model_poisoning' | 'adversarial_robustness' | 'zero_day'>('unified');
+  const [filterScanType, setFilterScanType] = useState<'all' | 'unified' | 'vulnerability' | 'llm_rag' | 'model_provenance' | 'container' | 'sast' | 'ml_security' | 'dataset_poisoning' | 'model_poisoning' | 'adversarial_robustness' | 'zero_day'>('all');
   const [selectedScans, setSelectedScans] = useState<number[]>([]);
 
   useEffect(() => {
@@ -92,6 +92,21 @@ export default function ScanHistory() {
           case 'sast':
             response = await scannerAPI.runSASTScan(project.id);
             break;
+          case 'ml_security':
+            response = await scannerAPI.runMLSecurityScan(project.id);
+            break;
+          case 'dataset_poisoning':
+            response = await scannerAPI.runDatasetPoisoningScan(project.id);
+            break;
+          case 'model_poisoning':
+            response = await scannerAPI.runModelPoisoningScan(project.id);
+            break;
+          case 'adversarial_robustness':
+            response = await scannerAPI.runAdversarialRobustnessScan(project.id);
+            break;
+          case 'zero_day':
+            response = await scannerAPI.runZeroDayScan(project.id);
+            break;
         }
       }
       setScanRuns([response.data, ...scanRuns]);
@@ -134,6 +149,11 @@ export default function ScanHistory() {
       case 'model_provenance': return '📜';
       case 'container': return '🐳';
       case 'sast': return '🔍';
+      case 'ml_security': return '🧠';
+      case 'dataset_poisoning': return '💉';
+      case 'model_poisoning': return '☠️';
+      case 'adversarial_robustness': return '⚔️';
+      case 'zero_day': return '🚨';
       default: return '🛡️';
     }
   };
@@ -145,6 +165,11 @@ export default function ScanHistory() {
       case 'model_provenance': return 'Model Provenance';
       case 'container': return 'Container Security';
       case 'sast': return 'SAST';
+      case 'ml_security': return 'ML Security';
+      case 'dataset_poisoning': return 'Dataset Poisoning';
+      case 'model_poisoning': return 'Model Poisoning';
+      case 'adversarial_robustness': return 'Adversarial Robustness';
+      case 'zero_day': return 'Zero-Day Threats';
       default: return 'Vulnerability';
     }
   };
@@ -195,6 +220,11 @@ export default function ScanHistory() {
               <option value="model_provenance">📜 Model Provenance</option>
               <option value="container">🐳 Container Security</option>
               <option value="sast">🔍 SAST (Code Analysis)</option>
+              <option value="ml_security">🧠 ML Security</option>
+              <option value="dataset_poisoning">💉 Dataset Poisoning</option>
+              <option value="model_poisoning">☠️ Model Poisoning</option>
+              <option value="adversarial_robustness">⚔️ Adversarial Robustness</option>
+              <option value="zero_day">🚨 Zero-Day Threats</option>
             </select>
             {scanType === 'vulnerability' && (
               <label className="cert-in-label">
@@ -236,6 +266,11 @@ export default function ScanHistory() {
                 <option value="model_provenance">📜 Model Provenance</option>
                 <option value="container">🐳 Container</option>
                 <option value="sast">🔍 SAST</option>
+                <option value="ml_security">🧠 ML Security</option>
+                <option value="dataset_poisoning">💉 Dataset Poisoning</option>
+                <option value="model_poisoning">☠️ Model Poisoning</option>
+                <option value="adversarial_robustness">⚔️ Adversarial Robustness</option>
+                <option value="zero_day">🚨 Zero-Day</option>
               </select>
             </div>
 

@@ -10,8 +10,14 @@ import { aibomAPI } from '../services/aibomAPI';
 import { scannerAPI, type ScannerRun } from '../services/scannerAPI';
 import type { Project } from '../services/projectAPI';
 import type { AIBOM } from '../services/aibomAPI';
-import { GrDocumentText, GrScan, GrDocument } from 'react-icons/gr';
+import { GrDocumentText, GrScan, GrDocument, GrVulnerability, GrShield } from 'react-icons/gr';
+import { PiTarget } from 'react-icons/pi';
+import { BsFillMenuAppFill } from 'react-icons/bs';
+import { SiOpenaigym } from 'react-icons/si';
+import { GoContainer } from 'react-icons/go';
+import { FaCode } from 'react-icons/fa';
 import './ProjectDetails.css';
+import { SecurityScoreCard } from '../components/SecurityScore';
 
 export default function ProjectDetails() {
   const { projectSlug } = useParams();
@@ -28,8 +34,8 @@ export default function ProjectDetails() {
   const [showProgressDock, setShowProgressDock] = useState(false);
   const [activeScanId, setActiveScanId] = useState<number | null>(null);
   const [certInEnabled, setCertInEnabled] = useState(false);
-  const [scanType, setScanType] = useState<'unified' | 'vulnerability' | 'llm_rag' | 'model_provenance' | 'container' | 'sast'>('unified');
-  const [filterScanType, setFilterScanType] = useState<'all' | 'unified' | 'vulnerability' | 'llm_rag' | 'model_provenance' | 'container' | 'sast'>('all');
+  const [scanType, setScanType] = useState<'unified' | 'vulnerability' | 'llm_rag' | 'model_provenance' | 'container' | 'sast' | 'ml_security' | 'dataset_poisoning' | 'model_poisoning' | 'adversarial_robustness' | 'zero_day'>('unified');
+  const [filterScanType, setFilterScanType] = useState<'all' | 'unified' | 'vulnerability' | 'llm_rag' | 'model_provenance' | 'container' | 'sast' | 'ml_security' | 'dataset_poisoning' | 'model_poisoning' | 'adversarial_robustness' | 'zero_day'>('all');
 
   useEffect(() => {
     fetchProject();
@@ -131,6 +137,21 @@ export default function ProjectDetails() {
           case 'sast':
             response = await scannerAPI.runSASTScan(project.id);
             break;
+          case 'ml_security':
+            response = await scannerAPI.runMLSecurityScan(project.id);
+            break;
+          case 'dataset_poisoning':
+            response = await scannerAPI.runDatasetPoisoningScan(project.id);
+            break;
+          case 'model_poisoning':
+            response = await scannerAPI.runModelPoisoningScan(project.id);
+            break;
+          case 'adversarial_robustness':
+            response = await scannerAPI.runAdversarialRobustnessScan(project.id);
+            break;
+          case 'zero_day':
+            response = await scannerAPI.runZeroDayScan(project.id);
+            break;
         }
       }
       setScanRuns([response.data, ...scanRuns]);
@@ -174,6 +195,18 @@ export default function ProjectDetails() {
     }
   };
 
+  const getScanTypeIcon = (scanType: string) => {
+    switch(scanType) {
+      case 'unified': return <PiTarget size={16} />;
+      case 'vulnerability': return <GrVulnerability size={16} />;
+      case 'llm_rag': return <BsFillMenuAppFill size={16} />;
+      case 'model_provenance': return <SiOpenaigym size={16} />;
+      case 'container': return <GoContainer size={16} />;
+      case 'sast': return <FaCode size={16} />;
+      default: return <GrScan size={16} />;
+    }
+  };
+
   if (loading) {
     return (
       <DashboardLayout>
@@ -193,13 +226,22 @@ export default function ProjectDetails() {
   const tabs = [
     { id: 'aibom', label: 'AIBOM', icon: <GrDocumentText size={14} /> },
     { id: 'scans', label: 'Scans', icon: <GrScan size={14} /> },
+    { id: 'scoring', label: 'Scoring', icon: <GrShield size={14} /> },
+    { id: 'fingerprinting', label: 'Fingerprinting', icon: <GrShield size={14} /> },
+    { id: 'security-gate', label: 'Security Gate', icon: <GrShield size={14} /> },
     { id: 'reports', label: 'Reports', icon: <GrDocument size={14} /> }
   ];
 
   const handleTabClick = (tabId: string) => {
+    const orgSlug = window.location.pathname.split('/')[1];
     if (tabId === 'scans') {
-      const orgSlug = window.location.pathname.split('/')[1];
       navigate(`/${orgSlug}/projects/${projectSlug}/scans`);
+    } else if (tabId === 'scoring') {
+      navigate(`/${orgSlug}/projects/${projectSlug}/scoring`);
+    } else if (tabId === 'fingerprinting') {
+      navigate(`/${orgSlug}/projects/${projectSlug}/fingerprinting`);
+    } else if (tabId === 'security-gate') {
+      navigate(`/${orgSlug}/projects/${projectSlug}/security-gate`);
     } else {
       setActiveTab(tabId);
     }
@@ -225,7 +267,16 @@ export default function ProjectDetails() {
             </a>
           )}
         </div>
-        <div className="project-details-meta">
+        <div className="project-details-actions">
+          <button 
+            className="btn-attack-simulation"
+            onClick={() => {
+              const orgSlug = window.location.pathname.split('/')[1];
+              navigate(`/${orgSlug}/projects/${projectSlug}/attack-simulation`);
+            }}
+          >
+            ⚡ Attack Simulation
+          </button>
           <span className="project-source-badge">{project.source_type}</span>
         </div>
       </div>
@@ -346,26 +397,34 @@ export default function ProjectDetails() {
             <div className="content-header">
               <h2>Security Scans</h2>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                <select 
-                  value={scanType} 
-                  onChange={(e) => setScanType(e.target.value as any)}
-                  style={{ 
-                    padding: '8px 12px', 
-                    background: '#1e293b', 
-                    border: '1px solid #475569', 
-                    borderRadius: '6px', 
-                    color: '#fff',
-                    fontSize: '14px',
-                    fontWeight: '500'
-                  }}
-                >
-                  <option value="unified">🎯 Unified Scan (Intelligent)</option>
-                  <option value="vulnerability">🛡️ Vulnerability Scan</option>
-                  <option value="llm_rag">🤖 LLM/RAG Security</option>
-                  <option value="model_provenance">📜 Model Provenance</option>
-                  <option value="container">🐳 Container Security</option>
-                  <option value="sast">🔍 SAST (Code Analysis)</option>
-                </select>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {getScanTypeIcon(scanType)}
+                  <select 
+                    value={scanType} 
+                    onChange={(e) => setScanType(e.target.value as any)}
+                    style={{ 
+                      padding: '8px 12px', 
+                      background: '#1e293b', 
+                      border: '1px solid #475569', 
+                      borderRadius: '6px', 
+                      color: '#fff',
+                      fontSize: '14px',
+                      fontWeight: '500'
+                    }}
+                  >
+                    <option value="unified">Unified Scan (Intelligent)</option>
+                    <option value="vulnerability">Vulnerability Scan</option>
+                    <option value="llm_rag">LLM/RAG Security</option>
+                    <option value="model_provenance">Model Provenance</option>
+                    <option value="container">Container Security</option>
+                    <option value="sast">SAST (Code Analysis)</option>
+                    <option value="ml_security">ML Security</option>
+                    <option value="dataset_poisoning">Dataset Poisoning</option>
+                    <option value="model_poisoning">Model Poisoning</option>
+                    <option value="adversarial_robustness">Adversarial Robustness</option>
+                    <option value="zero_day">Zero-Day Threats</option>
+                  </select>
+                </div>
                 {scanType === 'vulnerability' && (
                   <label style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '14px' }}>
                     <input 
@@ -434,12 +493,17 @@ export default function ProjectDetails() {
                         }}
                       >
                         <option value="all">All Scans</option>
-                        <option value="unified">🎯 Unified</option>
-                        <option value="vulnerability">🛡️ Vulnerability</option>
-                        <option value="llm_rag">🤖 LLM/RAG</option>
-                        <option value="model_provenance">📜 Model Provenance</option>
-                        <option value="container">🐳 Container</option>
-                        <option value="sast">🔍 SAST</option>
+                        <option value="unified">Unified</option>
+                        <option value="vulnerability">Vulnerability</option>
+                        <option value="llm_rag">LLM/RAG</option>
+                        <option value="model_provenance">Model Provenance</option>
+                        <option value="container">Container</option>
+                        <option value="sast">SAST</option>
+                        <option value="ml_security">ML Security</option>
+                        <option value="dataset_poisoning">Dataset Poisoning</option>
+                        <option value="model_poisoning">Model Poisoning</option>
+                        <option value="adversarial_robustness">Adversarial Robustness</option>
+                        <option value="zero_day">Zero-Day</option>
                       </select>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -459,19 +523,18 @@ export default function ProjectDetails() {
                         >
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <span style={{ fontSize: '16px' }}>
-                                {run.scan_type === 'unified' ? '🎯' :
-                                 run.scan_type === 'llm_rag' ? '🤖' : 
-                                 run.scan_type === 'model_provenance' ? '📜' :
-                                 run.scan_type === 'container' ? '🐳' :
-                                 run.scan_type === 'sast' ? '🔍' : '🛡️'}
-                              </span>
+                              {getScanTypeIcon(run.scan_type)}
                               <span style={{ fontWeight: '500' }}>
                                 {run.scan_type === 'unified' ? 'Unified Scan' :
                                  run.scan_type === 'llm_rag' ? 'LLM/RAG Security' : 
                                  run.scan_type === 'model_provenance' ? 'Model Provenance' :
                                  run.scan_type === 'container' ? 'Container Security' :
-                                 run.scan_type === 'sast' ? 'SAST' : 'Vulnerability'}
+                                 run.scan_type === 'sast' ? 'SAST' :
+                                 run.scan_type === 'ml_security' ? 'ML Security' :
+                                 run.scan_type === 'dataset_poisoning' ? 'Dataset Poisoning' :
+                                 run.scan_type === 'model_poisoning' ? 'Model Poisoning' :
+                                 run.scan_type === 'adversarial_robustness' ? 'Adversarial Robustness' :
+                                 run.scan_type === 'zero_day' ? 'Zero-Day Threats' : 'Vulnerability'}
                               </span>
                               <span style={{ color: '#64748b' }}>•</span>
                               <span style={{ fontSize: '14px', color: '#94a3b8' }}>

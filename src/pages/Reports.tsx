@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/layout/DashboardLayout';
+import ReportViewer from '../components/ReportViewer';
 import api from '../services/api';
 
 interface Report {
@@ -36,6 +37,7 @@ export default function Reports() {
   const [loading, setLoading] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [generating, setGenerating] = useState(false);
+  const [viewingScanId, setViewingScanId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchReports();
@@ -349,36 +351,68 @@ export default function Reports() {
                   {new Date(report.created_at).toLocaleString()}
                 </div>
 
-                <button
-                  onClick={() => downloadReport(report.filename)}
-                  style={{
-                    width: '100%',
-                    padding: '10px 16px',
-                    background: '#fec76f',
-                    color: '#0a0a0a',
-                    border: 'none',
-                    borderRadius: '6px',
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#ffd98f';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#fec76f';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  <span>⬇️</span>
-                  Download PDF
-                </button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    onClick={() => setViewingScanId(scanId!)}
+                    style={{
+                      flex: 1,
+                      padding: '10px 16px',
+                      background: '#3b82f6',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '13px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#2563eb';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#3b82f6';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <span>👁️</span>
+                    View Report
+                  </button>
+                  <button
+                    onClick={() => downloadReport(report.filename)}
+                    style={{
+                      flex: 1,
+                      padding: '10px 16px',
+                      background: '#fec76f',
+                      color: '#0a0a0a',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '13px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#ffd98f';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#fec76f';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <span>⬇️</span>
+                    Download PDF
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -404,6 +438,13 @@ export default function Reports() {
           </ul>
         </div>
       </div>
+
+      {viewingScanId && (
+        <ReportViewer
+          scanId={viewingScanId}
+          onClose={() => setViewingScanId(null)}
+        />
+      )}
     </DashboardLayout>
   );
 }
