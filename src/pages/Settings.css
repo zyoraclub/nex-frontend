@@ -1,0 +1,505 @@
+.settings-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.settings-header {
+  margin-bottom: 32px;
+}
+
+.settings-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+}
+
+.settings-header p {
+  color: #888888;
+  margin: 0;
+}
+
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-card {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.settings-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.settings-icon {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  background: rgba(254, 199, 111, 0.1);
+  border-radius: 10px;
+  color: #fec76f;
+  flex-shrink: 0;
+}
+
+.settings-card-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+}
+
+.settings-card-header p {
+  font-size: 14px;
+  color: #888888;
+  margin: 0;
+}
+
+/* Form Styles */
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #cccccc;
+}
+
+.form-group input {
+  background: #000000;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #ffffff;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #fec76f;
+}
+
+.form-group input::placeholder {
+  color: #666666;
+}
+
+.form-hint {
+  font-size: 12px;
+  color: #666666;
+}
+
+.password-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input input {
+  flex: 1;
+  padding-right: 48px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #666666;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-password:hover {
+  color: #ffffff;
+}
+
+/* Buttons */
+.btn-primary {
+  background: #fec76f;
+  color: #000000;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #ffd699;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover {
+  background: #1a1a1a;
+  border-color: #3a3a3a;
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Messages */
+.message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.message.success {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.message.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* 2FA Styles */
+.loading-state {
+  text-align: center;
+  padding: 40px;
+  color: #888888;
+}
+
+.two-factor-enabled .status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-badge.enabled {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.method-info {
+  margin: 16px 0 24px 0;
+  color: #888888;
+  font-size: 14px;
+}
+
+.method-info strong {
+  color: #ffffff;
+}
+
+.disable-section {
+  padding-top: 24px;
+  border-top: 1px solid #1a1a1a;
+}
+
+.disable-section h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ef4444;
+  margin: 0 0 16px 0;
+}
+
+/* 2FA Options */
+.options-intro {
+  color: #888888;
+  margin: 0 0 20px 0;
+  font-size: 14px;
+}
+
+.method-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.method-card {
+  background: #000000;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.method-card:hover {
+  border-color: #fec76f;
+  background: #0a0a0a;
+}
+
+.method-icon {
+  width: 32px;
+  height: 32px;
+  color: #fec76f;
+  margin-bottom: 12px;
+}
+
+.method-card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+}
+
+.method-card p {
+  font-size: 13px;
+  color: #888888;
+  margin: 0;
+}
+
+.method-card .recommended {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(254, 199, 111, 0.1);
+  color: #fec76f;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* 2FA Setup */
+.two-factor-setup h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+}
+
+.two-factor-setup > p {
+  color: #888888;
+  font-size: 14px;
+  margin: 0 0 24px 0;
+}
+
+.qr-section {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: #000000;
+  border-radius: 12px;
+}
+
+.qr-code {
+  width: 160px;
+  height: 160px;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 8px;
+}
+
+.manual-entry {
+  flex: 1;
+}
+
+.manual-entry p {
+  color: #888888;
+  font-size: 13px;
+  margin: 0 0 8px 0;
+}
+
+.manual-entry code {
+  display: block;
+  background: #1a1a1a;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  color: #fec76f;
+  letter-spacing: 2px;
+  word-break: break-all;
+}
+
+.verification-input {
+  text-align: center;
+  font-size: 24px !important;
+  letter-spacing: 8px;
+  font-family: 'Fira Code', monospace;
+}
+
+.email-setup {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.email-setup h3 {
+  margin-bottom: 8px;
+}
+
+.email-setup > p {
+  margin-bottom: 24px;
+}
+
+.setup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #1a1a1a;
+}
+
+/* Backup Codes Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.backup-codes-modal {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.backup-codes-modal h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+}
+
+.backup-codes-modal > p {
+  color: #888888;
+  font-size: 14px;
+  margin: 0 0 24px 0;
+}
+
+.backup-codes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.backup-code {
+  background: #000000;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 12px 16px;
+  text-align: center;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  color: #fec76f;
+  letter-spacing: 1px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .method-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .qr-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .backup-codes-grid {
+    grid-template-columns: 1fr;
+  }
+}

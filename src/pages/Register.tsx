@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { authAPI } from '../services/api';
+import { FaGithub } from 'react-icons/fa';
 import './Auth.css';
 
 export default function Register() {
@@ -45,6 +46,17 @@ export default function Register() {
     }
   };
 
+  const handleOAuthLogin = async (provider: 'github' | 'google') => {
+    try {
+      const response = await authAPI.getOAuthUrl(provider);
+      // Store state for CSRF validation on callback
+      sessionStorage.setItem('oauth_state', response.data.state);
+      window.location.href = response.data.auth_url;
+    } catch (err: any) {
+      setError(err.response?.data?.detail || `Failed to connect to ${provider}`);
+    }
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -55,6 +67,23 @@ export default function Register() {
 
         {error && <div className="error-message">{error}</div>}
         {success && <div className="success-message">{success}</div>}
+
+        {/* OAuth Buttons */}
+        <div className="oauth-buttons">
+          <button
+            type="button"
+            className="oauth-btn github"
+            onClick={() => handleOAuthLogin('github')}
+            style={{ flex: 'none', width: '100%' }}
+          >
+            <FaGithub size={18} />
+            <span>Continue with GitHub</span>
+          </button>
+        </div>
+
+        <div className="auth-divider">
+          <span>or register with email</span>
+        </div>
 
         <form onSubmit={handleSubmit}>
           {!invitationToken && (

@@ -1,7 +1,8 @@
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { GrNotification, GrTooltip, GrConnect, GrUser, GrPower } from 'react-icons/gr';
 import { authAPI } from '../../services/api';
+import { NotificationContext } from '../../contexts/NotificationContext';
 import NotificationCenter from './NotificationCenter';
 import './Layout.css';
 
@@ -12,13 +13,19 @@ export default function Header() {
   const [orgName, setOrgName] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
 
+  // Safe access to notifications context (may not be available on login pages)
+  const notificationContext = useContext(NotificationContext);
+  const hasUnread = notificationContext?.hasUnread ?? false;
+  const markAllAsRead = notificationContext?.markAllAsRead ?? (() => {});
+  const setHasUnread = notificationContext?.setHasUnread ?? (() => {});
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await authAPI.getMe();
         setOrgName(response.data.organization_name);
       } catch (err) {
-        console.error('Failed to fetch user');
+        // Silent fail
       }
     };
     fetchUser();
@@ -35,6 +42,15 @@ export default function Header() {
     navigate('/login');
   };
 
+  const handleNotificationClick = () => {
+    setShowNotifications(!showNotifications);
+    if (!showNotifications) {
+      // Mark as read when opening
+      markAllAsRead();
+      setHasUnread(false);
+    }
+  };
+
   return (
     <>
       <div className="header">
@@ -46,18 +62,19 @@ export default function Header() {
           </div>
         </div>
         <div className="header-right">
-          <button 
-            className="header-icon-btn" 
+          <button
+            className="header-icon-btn notification-btn"
             title="Notifications"
-            onClick={() => setShowNotifications(!showNotifications)}
+            onClick={handleNotificationClick}
           >
             <GrNotification size={16} />
+            {hasUnread && <span className="notification-dot" />}
           </button>
           <button className="header-icon-btn" title="News">
             <GrTooltip size={16} />
           </button>
-          <button 
-            className="header-icon-btn" 
+          <button
+            className="header-icon-btn"
             title="Integrations"
             onClick={() => navigate(`/${orgSlug}/integrations`)}
           >
@@ -74,10 +91,10 @@ export default function Header() {
           </button>
         </div>
       </div>
-      
-      <NotificationCenter 
-        isOpen={showNotifications} 
-        onClose={() => setShowNotifications(false)} 
+
+      <NotificationCenter
+        isOpen={showNotifications}
+        onClose={() => setShowNotifications(false)}
       />
     </>
   );

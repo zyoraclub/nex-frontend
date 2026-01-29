@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { integrationAPI } from '../services/integrationAPI';
 
 export default function GitHubCallback() {
   const [searchParams] = useSearchParams();
@@ -9,34 +8,45 @@ export default function GitHubCallback() {
 
   useEffect(() => {
     const handleCallback = async () => {
-      const token = searchParams.get('token');
-      const state = searchParams.get('state');
+      // Check for OAuth success (token is now stored server-side)
+      const oauthSuccess = searchParams.get('oauth');
       const installationId = searchParams.get('installation_id');
-      const savedState = localStorage.getItem('github_oauth_state');
+      const appInstalled = searchParams.get('app_installed');
+      const error = searchParams.get('message');
 
-      if (!token || state !== savedState) {
-        setStatus('Authentication failed');
+      if (error) {
+        setStatus(`Authentication failed: ${error}`);
         setTimeout(() => navigate('/integrations'), 2000);
         return;
       }
 
-      try {
-        await integrationAPI.connectGitHub({
-          integration_name: 'GitHub OAuth',
-          access_token: token,
-          repositories: [],
-          installation_id: installationId ? parseInt(installationId) : null
-        });
-        
-        localStorage.removeItem('github_oauth_state');
+      if (oauthSuccess === 'success') {
         setStatus('Connected successfully!');
         const orgSlug = localStorage.getItem('orgSlug') || 'org';
-        // Redirect to GitHub integration page instead of generic integrations
         setTimeout(() => navigate(`/${orgSlug}/integrations/github`), 1000);
-      } catch (err) {
-        setStatus('Failed to save integration');
-        setTimeout(() => navigate('/integrations'), 2000);
+        return;
       }
+
+      if (appInstalled === 'true' && installationId) {
+        setStatus('GitHub App installed successfully!');
+        const orgSlug = localStorage.getItem('orgSlug') || 'org';
+        setTimeout(() => navigate(`/${orgSlug}/integrations/github`), 1000);
+        return;
+      }
+
+      // Legacy fallback: check for token in URL (deprecated - old flow)
+      const token = searchParams.get('token');
+      if (token) {
+        // Old flow - redirect to new integration page
+        setStatus('Redirecting...');
+        const orgSlug = localStorage.getItem('orgSlug') || 'org';
+        setTimeout(() => navigate(`/${orgSlug}/integrations/github?oauth=success`), 500);
+        return;
+      }
+
+      // No valid callback params
+      setStatus('Invalid callback. Redirecting...');
+      setTimeout(() => navigate('/integrations'), 2000);
     };
 
     handleCallback();
@@ -45,13 +55,26 @@ export default function GitHubCallback() {
   return (
     <div style={{
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       height: '100vh',
       background: '#000000',
       color: '#ffffff',
-      fontSize: '16px'
+      fontSize: '16px',
+      gap: '16px'
     }}>
+      <div style={{
+        width: '40px',
+        height: '40px',
+        border: '3px solid #333',
+        borderTopColor: '#fec76f',
+        borderRadius: '50%',
+        animation: 'spin 1s linear infinite'
+      }} />
+      <style>
+        {`@keyframes spin { to { transform: rotate(360deg); } }`}
+      </style>
       {status}
     </div>
   );

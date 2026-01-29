@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { type ScannerRun, type ScannerFinding } from '../../services/scannerAPI';
 import { scannerAPI } from '../../services/scannerAPI';
-import { GrShieldSecurity, GrRobot, GrDocumentText, GrCube, GrSearch, GrStatusGood } from 'react-icons/gr';
+import { GrShieldSecurity, GrRobot, GrDocumentText, GrCube, GrSearch, GrStatusGood, GrCloud, GrLineChart, GrRadialSelected, GrAlert } from 'react-icons/gr';
+import { SiHuggingface, SiAmazon } from 'react-icons/si';
+import { TbShieldBolt } from 'react-icons/tb';
 import FindingDetailModal from './FindingDetailModal';
 import './UnifiedScanResults.css';
 
@@ -38,15 +40,18 @@ export default function UnifiedScanResults({ run }: UnifiedScanResultsProps) {
   const skipped = orchestratorDecision.skipped || [];
   const skipReasons = orchestratorDecision.skip_reasons || {};
 
-  console.log('Orchestrator Decision:', orchestratorDecision);
-  console.log('Scanners Run:', scannersRun);
-
   const scannerCategories = [
     { id: 'vulnerability', label: 'Vulnerability', icon: <GrShieldSecurity size={16} />, color: '#3b82f6' },
+    { id: 'ml_security', label: 'ML Security', icon: <TbShieldBolt size={16} />, color: '#ec4899' },
     { id: 'llm_rag', label: 'LLM/RAG', icon: <GrRobot size={16} />, color: '#8b5cf6' },
     { id: 'model_provenance', label: 'Model Provenance', icon: <GrDocumentText size={16} />, color: '#f59e0b' },
+    { id: 'adversarial_robustness', label: 'Adversarial', icon: <GrRadialSelected size={16} />, color: '#ef4444' },
+    { id: 'zero_day', label: 'Zero-Day', icon: <GrAlert size={16} />, color: '#dc2626' },
+    { id: 'model_drift', label: 'Model Drift', icon: <GrLineChart size={16} />, color: '#14b8a6' },
     { id: 'container', label: 'Container', icon: <GrCube size={16} />, color: '#06b6d4' },
-    { id: 'sast', label: 'SAST', icon: <GrSearch size={16} />, color: '#10b981' }
+    { id: 'sast', label: 'SAST', icon: <GrSearch size={16} />, color: '#10b981' },
+    { id: 'sagemaker', label: 'SageMaker', icon: <SiAmazon size={16} />, color: '#f97316' },
+    { id: 'huggingface', label: 'HuggingFace', icon: <SiHuggingface size={16} />, color: '#fbbf24' }
   ];
 
   const filteredFindings = selectedScanner === 'all' 
@@ -88,7 +93,7 @@ export default function UnifiedScanResults({ run }: UnifiedScanResultsProps) {
           </div>
           <div className="stat-item">
             <span className="stat-label">Scanners Run</span>
-            <span className="stat-value">{scannersRun.length}/5</span>
+            <span className="stat-value">{scannersRun.length}/{scannerCategories.length}</span>
           </div>
         </div>
       </div>

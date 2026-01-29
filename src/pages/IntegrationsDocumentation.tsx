@@ -1,303 +1,644 @@
 import { useState } from 'react';
-import { FaGithub, FaGitlab, FaBitbucket, FaAws, FaSlack, FaJira, FaDocker, FaGoogle } from 'react-icons/fa';
+import { FaGithub, FaGitlab, FaBitbucket, FaAws, FaSlack, FaJira, FaDocker, FaGoogle, FaSearch, FaChevronDown, FaChevronRight, FaExternalLinkAlt, FaCheckCircle, FaLock, FaCog } from 'react-icons/fa';
 import { SiHuggingface, SiPagerduty } from 'react-icons/si';
+import { TbBrandAzure } from 'react-icons/tb';
 import { VscAzureDevops } from 'react-icons/vsc';
+import { GrBook, GrIntegration, GrShield, GrCloud, GrNotification, GrCode, GrConfigure } from 'react-icons/gr';
 import './IntegrationsDocumentation.css';
 
-export default function IntegrationsDocumentation() {
-  const [activeTab, setActiveTab] = useState('source');
+interface Integration {
+  name: string;
+  icon: React.ReactNode;
+  color: string;
+  description: string;
+  category: string;
+  setupSteps: string[];
+  features: string[];
+  permissions: string[];
+  docsUrl?: string;
+  status?: 'stable' | 'beta' | 'new';
+}
 
-  const sourceIntegrations = [
+export default function IntegrationsDocumentation() {
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [expandedCard, setExpandedCard] = useState<string | null>(null);
+
+  const categories = [
+    { id: 'all', name: 'All Integrations', icon: <GrIntegration />, count: 12 },
+    { id: 'source-control', name: 'Source Control', icon: <GrCode />, count: 4 },
+    { id: 'cloud-ml', name: 'Cloud ML Platforms', icon: <GrCloud />, count: 3 },
+    { id: 'container', name: 'Container Registries', icon: <FaDocker />, count: 3 },
+    { id: 'notifications', name: 'Notifications', icon: <GrNotification />, count: 3 },
+    { id: 'ticketing', name: 'Issue Tracking', icon: <FaCog />, count: 1 },
+  ];
+
+  const integrations: Integration[] = [
+    // Source Control
     {
       name: 'GitHub',
       icon: <FaGithub />,
       color: '#fff',
-      description: 'Connect GitHub repositories for code scanning, AIBOM generation, and automated PR creation',
+      category: 'source-control',
+      description: 'Connect GitHub repositories for comprehensive AI/ML code scanning, automated AIBOM generation, and security-aware PR workflows.',
       setupSteps: [
-        'Go to Integrations page and click "Connect GitHub"',
-        'Choose OAuth (personal) or GitHub App (organization)',
-        'Authorize Nexula to access your repositories',
-        'For GitHub App: Install app on organization/repositories',
-        'Select repositories you want to scan',
-        'Click "Connect" to complete setup'
+        'Navigate to Settings → Integrations in your Nexula dashboard',
+        'Click "Connect GitHub" and select authentication method',
+        'Choose OAuth for personal accounts or GitHub App for organizations',
+        'Authorize Nexula and select repositories to monitor',
+        'Configure scanning preferences and webhook settings',
+        'Click "Complete Setup" to activate the integration'
       ],
       features: [
-        'Repository scanning',
-        'AIBOM generation',
-        'Dependency analysis',
-        'Security scanning',
-        '🎉 NEW: Auto-PR creation after scans',
-        '🎉 NEW: PR comments with scan results',
-        '🎉 NEW: GitHub Checks integration'
+        'Automated repository scanning on push/PR events',
+        'AIBOM generation from repository contents',
+        'Dependency vulnerability analysis',
+        'Auto-PR creation with security fixes',
+        'PR comments with scan results summary',
+        'GitHub Checks integration for CI/CD gates',
+        'Branch protection rule enforcement'
       ],
       permissions: [
-        'Read repository contents',
-        'Access repository metadata',
-        'Create pull requests (for auto-remediation)',
-        'Write checks (GitHub App only)',
-        'Comment on pull requests (GitHub App only)'
-      ]
+        'Contents: Read - Access repository files',
+        'Metadata: Read - Repository information',
+        'Pull Requests: Write - Create remediation PRs',
+        'Checks: Write - Report scan status (App only)',
+        'Webhooks: Read/Write - Event notifications'
+      ],
+      status: 'stable',
+      docsUrl: '/api-docs?tab=webhooks'
     },
     {
       name: 'GitLab',
       icon: <FaGitlab />,
       color: '#FC6D26',
-      description: 'Integrate GitLab projects for comprehensive AI security analysis',
+      category: 'source-control',
+      description: 'Integrate GitLab projects for enterprise-grade AI security analysis with CI/CD pipeline integration and merge request workflows.',
       setupSteps: [
-        'Navigate to Integrations and select GitLab',
-        'Generate a Personal Access Token in GitLab Settings',
-        'Paste the token and select projects',
-        'Save integration'
+        'Go to Settings → Integrations → GitLab',
+        'Enter your GitLab instance URL (gitlab.com or self-hosted)',
+        'Generate a Personal Access Token with api and read_repository scopes',
+        'Paste the token and click "Verify Connection"',
+        'Select projects to monitor from the list',
+        'Configure pipeline triggers and save'
       ],
-      features: ['Project scanning', 'CI/CD integration', 'Merge request analysis', 'Security reports'],
-      permissions: ['Read API', 'Read repository']
+      features: [
+        'Project and group-level scanning',
+        'CI/CD pipeline integration via .gitlab-ci.yml',
+        'Merge request security comments',
+        'Security reports in GitLab Security Dashboard',
+        'Scheduled scanning support'
+      ],
+      permissions: [
+        'api - Full API access',
+        'read_repository - Clone repositories',
+        'read_user - User information'
+      ],
+      status: 'stable'
     },
     {
       name: 'Bitbucket',
       icon: <FaBitbucket />,
       color: '#0052CC',
-      description: 'Connect Bitbucket repositories for AI asset discovery',
+      category: 'source-control',
+      description: 'Connect Bitbucket Cloud or Server repositories for AI asset discovery and automated security scanning.',
       setupSteps: [
-        'Click "Connect Bitbucket" in Integrations',
-        'Authorize Nexula OAuth application',
-        'Choose repositories to monitor',
-        'Complete connection'
+        'Navigate to Integrations → Bitbucket',
+        'Click "Connect Bitbucket" to start OAuth flow',
+        'Authorize Nexula in your Atlassian account',
+        'Select workspace and repositories to monitor',
+        'Configure branch filters and save'
       ],
-      features: ['Repository analysis', 'Branch scanning', 'Pull request checks', 'Automated scanning'],
-      permissions: ['Read repositories', 'Access account information']
+      features: [
+        'Repository scanning with branch filters',
+        'Pull request build status integration',
+        'Automated scanning on push events',
+        'Bitbucket Pipelines compatibility'
+      ],
+      permissions: [
+        'Repository: Read - Access code',
+        'Pull Request: Read/Write - Status updates',
+        'Webhook: Manage - Event subscriptions'
+      ],
+      status: 'stable'
     },
     {
       name: 'Azure DevOps',
       icon: <VscAzureDevops />,
       color: '#0078D4',
-      description: 'Integrate Azure DevOps repositories for enterprise-grade scanning',
+      category: 'source-control',
+      description: 'Integrate Azure DevOps repositories and pipelines for enterprise security scanning with work item tracking.',
       setupSteps: [
-        'Go to Azure DevOps integration page',
-        'Enter your organization URL',
-        'Generate and provide Personal Access Token',
-        'Select repositories and connect'
+        'Go to Integrations → Azure DevOps',
+        'Enter your Azure DevOps organization URL',
+        'Generate a Personal Access Token with Code (Read) scope',
+        'Paste token and verify connection',
+        'Select projects and repositories',
+        'Configure pipeline service connections'
       ],
-      features: ['Repository scanning', 'Pipeline integration', 'Work item tracking', 'Security analysis'],
-      permissions: ['Code (Read)', 'Project and Team (Read)']
+      features: [
+        'Azure Repos Git scanning',
+        'Azure Pipelines integration',
+        'Work item auto-creation for findings',
+        'Azure Boards integration',
+        'Service connection for pipeline tasks'
+      ],
+      permissions: [
+        'Code (Read) - Repository access',
+        'Project and Team (Read) - Project metadata',
+        'Work Items (Read/Write) - Issue tracking',
+        'Build (Read/Execute) - Pipeline integration'
+      ],
+      status: 'stable'
     },
+    // Cloud ML Platforms
     {
       name: 'AWS SageMaker',
       icon: <FaAws />,
       color: '#FF9900',
-      description: 'Discover and scan ML models, endpoints, and training jobs',
+      category: 'cloud-ml',
+      description: 'Discover and scan ML models, endpoints, training jobs, and feature stores in your AWS SageMaker environment.',
       setupSteps: [
-        'Navigate to AWS SageMaker integration',
-        'Provide AWS Access Key ID and Secret Key',
-        'Select AWS region',
-        'Click "Discover Resources" to scan'
+        'Navigate to Integrations → AWS SageMaker',
+        'Create an IAM user or role with required permissions',
+        'Enter AWS Access Key ID and Secret Access Key',
+        'Select AWS region(s) to scan',
+        'Click "Discover Resources" to inventory assets',
+        'Configure scheduled discovery (optional)'
       ],
-      features: ['Model discovery', 'Endpoint scanning', 'Training job analysis', 'Security assessment'],
-      permissions: ['SageMaker:ListModels', 'SageMaker:DescribeModel', 'SageMaker:ListEndpoints']
+      features: [
+        'Model registry scanning',
+        'Endpoint security assessment',
+        'Training job analysis',
+        'Feature store discovery',
+        'Model artifact inspection',
+        'IAM permission analysis'
+      ],
+      permissions: [
+        'sagemaker:ListModels',
+        'sagemaker:DescribeModel',
+        'sagemaker:ListEndpoints',
+        'sagemaker:DescribeEndpoint',
+        'sagemaker:ListTrainingJobs',
+        's3:GetObject (for model artifacts)'
+      ],
+      status: 'stable'
     },
+    {
+      name: 'HuggingFace Hub',
+      icon: <SiHuggingface />,
+      color: '#FFD21E',
+      category: 'cloud-ml',
+      description: 'Scan models, datasets, and spaces from HuggingFace Hub for license compliance and security vulnerabilities.',
+      setupSteps: [
+        'Go to Integrations → HuggingFace',
+        'Log in to HuggingFace and go to Settings → Access Tokens',
+        'Create a new token with read access',
+        'Paste token in Nexula and verify',
+        'Select organization/user scope',
+        'Enable auto-discovery for new models'
+      ],
+      features: [
+        'Model card analysis',
+        'License compliance checking',
+        'Dataset security scanning',
+        'Space monitoring',
+        'Model lineage tracking',
+        'Vulnerability detection in model dependencies'
+      ],
+      permissions: [
+        'Read access to models',
+        'Read access to datasets',
+        'Read access to spaces',
+        'Organization membership (for org models)'
+      ],
+      status: 'stable'
+    },
+    {
+      name: 'Azure ML',
+      icon: <TbBrandAzure />,
+      color: '#0078D4',
+      category: 'cloud-ml',
+      description: 'Connect Azure Machine Learning workspaces for model registry scanning and compute security analysis.',
+      setupSteps: [
+        'Navigate to Integrations → Azure ML',
+        'Create a service principal in Azure Portal',
+        'Assign "Reader" role on ML workspace',
+        'Enter Tenant ID, Client ID, and Client Secret',
+        'Select subscription and workspace',
+        'Test connection and save'
+      ],
+      features: [
+        'Model registry scanning',
+        'Compute instance security',
+        'Environment analysis',
+        'Pipeline inspection',
+        'Datastore access review'
+      ],
+      permissions: [
+        'Reader role on ML workspace',
+        'Storage Blob Data Reader (optional)',
+        'Key Vault Secrets User (optional)'
+      ],
+      status: 'beta'
+    },
+    // Container Registries
     {
       name: 'AWS ECR',
       icon: <FaDocker />,
       color: '#FF9900',
-      description: 'Scan container images for vulnerabilities in Amazon ECR',
+      category: 'container',
+      description: 'Scan container images for vulnerabilities in Amazon Elastic Container Registry with automated findings.',
       setupSteps: [
-        'Navigate to AWS ECR integration page',
-        'Provide AWS Access Key ID and Secret Access Key',
+        'Go to Integrations → AWS ECR',
+        'Enter AWS credentials with ECR permissions',
         'Select AWS region',
-        'Click "Connect" to test connection',
-        'Discover repositories and scan images'
+        'Click "Discover Repositories"',
+        'Select repositories to monitor',
+        'Enable scan-on-push (recommended)'
       ],
-      features: ['Repository discovery', 'Image scanning', 'Vulnerability detection', 'Scan findings analysis'],
-      permissions: ['ecr:DescribeRepositories', 'ecr:DescribeImages', 'ecr:DescribeImageScanFindings', 'ecr:StartImageScan']
+      features: [
+        'Repository auto-discovery',
+        'Image vulnerability scanning',
+        'Scan findings aggregation',
+        'Layer-by-layer analysis',
+        'Base image tracking',
+        'Scan-on-push automation'
+      ],
+      permissions: [
+        'ecr:DescribeRepositories',
+        'ecr:DescribeImages',
+        'ecr:DescribeImageScanFindings',
+        'ecr:StartImageScan',
+        'ecr:GetAuthorizationToken'
+      ],
+      status: 'stable'
     },
     {
       name: 'Google Artifact Registry',
       icon: <FaGoogle />,
       color: '#4285F4',
-      description: 'Manage and scan container images in Google Cloud',
+      category: 'container',
+      description: 'Manage and scan container images and packages in Google Cloud Artifact Registry.',
       setupSteps: [
-        'Go to Google Artifact Registry integration',
-        'Create service account in GCP Console',
+        'Navigate to Integrations → Google Artifact Registry',
+        'Create a service account in GCP Console',
         'Grant "Artifact Registry Reader" role',
-        'Download service account JSON key',
-        'Paste JSON and connect'
+        'Download JSON key file',
+        'Upload or paste JSON key in Nexula',
+        'Select project and regions'
       ],
-      features: ['Repository discovery', 'Package scanning', 'Version tracking', 'Multi-region support'],
-      permissions: ['artifactregistry.repositories.list', 'artifactregistry.packages.list', 'artifactregistry.versions.list']
+      features: [
+        'Multi-format support (Docker, npm, Maven, etc.)',
+        'Repository discovery across regions',
+        'Package version tracking',
+        'Vulnerability scanning integration',
+        'Access audit logging'
+      ],
+      permissions: [
+        'artifactregistry.repositories.list',
+        'artifactregistry.packages.list',
+        'artifactregistry.versions.list',
+        'artifactregistry.files.get'
+      ],
+      status: 'stable'
     },
     {
       name: 'Azure Container Registry',
       icon: <VscAzureDevops />,
       color: '#0078D4',
-      description: 'Manage and scan container images in Azure',
+      category: 'container',
+      description: 'Connect Azure Container Registry for enterprise container image management and security scanning.',
       setupSteps: [
-        'Navigate to Azure Container Registry integration',
-        'Create service principal in Azure Portal',
-        'Assign "AcrPull" role to service principal',
-        'Provide registry name, tenant ID, client ID, and secret',
-        'Connect and discover repositories'
+        'Go to Integrations → Azure Container Registry',
+        'Create a service principal in Azure Portal',
+        'Assign "AcrPull" role to the service principal',
+        'Enter registry name and Azure AD credentials',
+        'Verify connection and discover repositories',
+        'Configure scan schedule'
       ],
-      features: ['Repository discovery', 'Tag management', 'Manifest inspection', 'Image deletion'],
-      permissions: ['AcrPull', 'AcrDelete (optional)']
+      features: [
+        'Registry repository listing',
+        'Image tag management',
+        'Manifest inspection',
+        'Vulnerability scanning',
+        'Geo-replication support',
+        'Private endpoint compatibility'
+      ],
+      permissions: [
+        'AcrPull - Pull images',
+        'AcrPush - Push images (optional)',
+        'Reader - Registry metadata'
+      ],
+      status: 'stable'
     },
-    {
-      name: 'HuggingFace',
-      icon: <SiHuggingface />,
-      color: '#FFD21E',
-      description: 'Scan models, datasets, and spaces from HuggingFace Hub',
-      setupSteps: [
-        'Go to HuggingFace integration page',
-        'Generate API token from HuggingFace Settings',
-        'Paste token and connect',
-        'Discover your models and datasets'
-      ],
-      features: ['Model scanning', 'Dataset analysis', 'Space monitoring', 'License compliance'],
-      permissions: ['Read access to models', 'Read access to datasets']
-    }
-  ];
-
-  const notificationIntegrations = [
+    // Notifications
     {
       name: 'Slack',
       icon: <FaSlack />,
       color: '#4A154B',
-      description: 'Receive security alerts and scan results in Slack channels',
+      category: 'notifications',
+      description: 'Receive real-time security alerts, scan results, and vulnerability notifications directly in Slack channels.',
       setupSteps: [
-        'Click "Connect Slack" in Integrations',
-        'Select workspace and authorize',
-        'Choose channel for notifications',
-        'Configure alert preferences'
+        'Navigate to Integrations → Slack',
+        'Click "Add to Slack" button',
+        'Select your Slack workspace',
+        'Choose channel(s) for notifications',
+        'Configure alert severity thresholds',
+        'Customize message format preferences'
       ],
-      features: ['Real-time alerts', 'Scan completion notifications', 'Critical vulnerability alerts', 'Custom webhooks'],
-      permissions: ['Post messages', 'Access channel information']
+      features: [
+        'Real-time scan completion alerts',
+        'Critical vulnerability notifications',
+        'Daily/weekly security digests',
+        'Interactive message actions',
+        'Channel-based routing by project',
+        'Custom webhook support'
+      ],
+      permissions: [
+        'chat:write - Post messages',
+        'channels:read - List channels',
+        'incoming-webhook - Webhook access'
+      ],
+      status: 'stable'
     },
     {
       name: 'PagerDuty',
       icon: <SiPagerduty />,
       color: '#06AC38',
-      description: 'Create incidents for critical security findings',
+      category: 'notifications',
+      description: 'Create incidents for critical security findings with severity-based routing and on-call escalation.',
       setupSteps: [
-        'Navigate to PagerDuty integration',
-        'Authorize Nexula application',
-        'Select service for incidents',
-        'Set severity thresholds'
+        'Go to Integrations → PagerDuty',
+        'Click "Connect PagerDuty"',
+        'Authorize Nexula OAuth application',
+        'Select service for incident creation',
+        'Configure severity mapping',
+        'Set up escalation thresholds'
       ],
-      features: ['Incident creation', 'Severity-based routing', 'On-call notifications', 'Escalation policies'],
-      permissions: ['Create incidents', 'Read services']
+      features: [
+        'Automatic incident creation',
+        'Severity-based routing',
+        'On-call schedule integration',
+        'Escalation policy support',
+        'Incident deduplication',
+        'Custom urgency mapping'
+      ],
+      permissions: [
+        'incidents:write - Create incidents',
+        'services:read - List services',
+        'escalation_policies:read - Policy info'
+      ],
+      status: 'stable'
     },
+    // Issue Tracking
     {
       name: 'Jira',
       icon: <FaJira />,
       color: '#0052CC',
-      description: 'Automatically create tickets for security vulnerabilities',
+      category: 'ticketing',
+      description: 'Automatically create and track security issues in Jira with customizable templates and field mapping.',
       setupSteps: [
-        'Go to Jira integration page',
-        'Connect your Jira workspace',
-        'Select project and issue type',
-        'Configure ticket templates'
+        'Navigate to Integrations → Jira',
+        'Enter your Jira instance URL',
+        'Authenticate via OAuth or API token',
+        'Select project for issue creation',
+        'Configure issue type mapping',
+        'Set up custom field mappings'
       ],
-      features: ['Automatic ticket creation', 'Custom field mapping', 'Priority assignment', 'Status tracking'],
-      permissions: ['Create issues', 'Read projects']
+      features: [
+        'Automatic issue creation',
+        'Custom field mapping',
+        'Priority assignment rules',
+        'Component/label tagging',
+        'Issue linking support',
+        'Status sync back to Nexula',
+        'Bulk issue creation'
+      ],
+      permissions: [
+        'Browse projects',
+        'Create issues',
+        'Edit issues',
+        'Add comments',
+        'Transition issues'
+      ],
+      status: 'stable'
     }
   ];
 
-  const integrations = activeTab === 'source' ? sourceIntegrations : notificationIntegrations;
+  const filteredIntegrations = integrations.filter(integration => {
+    const matchesCategory = activeCategory === 'all' || integration.category === activeCategory;
+    const matchesSearch = integration.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         integration.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const toggleCardExpansion = (name: string) => {
+    setExpandedCard(expandedCard === name ? null : name);
+  };
+
+  const getStatusBadge = (status?: string) => {
+    switch (status) {
+      case 'new':
+        return <span className="status-badge new">New</span>;
+      case 'beta':
+        return <span className="status-badge beta">Beta</span>;
+      default:
+        return <span className="status-badge stable">Stable</span>;
+    }
+  };
 
   return (
     <div className="integrations-docs">
+      {/* Navigation */}
       <nav className="docs-navbar">
         <div className="navbar-content">
           <div className="navbar-logo">
             <img src="/images/logo/nexula.png" alt="Nexula" className="logo-image" />
+            <span className="logo-divider">/</span>
+            <span className="logo-section">Integrations</span>
+          </div>
+          <div className="navbar-search">
+            <FaSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search integrations..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
           <div className="navbar-menu">
-            <a href="https://cloud.nexula.one/login" className="nav-link">Login</a>
-            <a href="https://cloud.nexula.one/register" className="nav-link">Register</a>
-            <a href="mailto:support@nexula.one" className="nav-link">Support</a>
+            <a href="/api-docs" className="nav-link">API Docs</a>
+            <a href="https://cloud.nexula.one/login" className="nav-link nav-link-primary">Login</a>
           </div>
         </div>
       </nav>
 
-      <div className="docs-header">
-        <h1>Integrations Documentation</h1>
-        <p>Learn how to connect and configure Nexula integrations</p>
-      </div>
-
-      <div className="docs-tabs">
-          <button
-            className={activeTab === 'source' ? 'active' : ''}
-            onClick={() => setActiveTab('source')}
-          >
-            Source Integrations ({sourceIntegrations.length})
-          </button>
-          <button
-            className={activeTab === 'notification' ? 'active' : ''}
-            onClick={() => setActiveTab('notification')}
-          >
-            Notification Integrations ({notificationIntegrations.length})
-          </button>
-      </div>
-
-      <div className="integrations-grid">
-          {integrations.map((integration, index) => (
-            <div key={index} className="integration-doc-card">
-              <div className="integration-doc-header">
-                <div className="integration-icon" style={{ color: integration.color }}>
-                  {integration.icon}
-                </div>
-                <h2>{integration.name}</h2>
-              </div>
-
-              <p className="integration-description">{integration.description}</p>
-
-              <div className="doc-section">
-                <h3>Setup Instructions</h3>
-                <ol className="setup-steps">
-                  {integration.setupSteps.map((step, i) => (
-                    <li key={i}>{step}</li>
-                  ))}
-                </ol>
-              </div>
-
-              <div className="doc-section">
-                <h3>Features</h3>
-                <ul className="features-list">
-                  {integration.features.map((feature, i) => (
-                    <li key={i}>✓ {feature}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="doc-section">
-                <h3>Required Permissions</h3>
-                <ul className="permissions-list">
-                  {integration.permissions.map((permission, i) => (
-                    <li key={i}>• {permission}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <a
-                href="https://cloud.nexula.one/login"
-                className="setup-button"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Get Started →
-              </a>
+      {/* Hero Section */}
+      <div className="docs-hero">
+        <div className="hero-content">
+          <div className="hero-badge">
+            <GrIntegration /> {integrations.length} Integrations Available
+          </div>
+          <h1>Connect Your AI/ML Stack</h1>
+          <p>
+            Seamlessly integrate Nexula with your existing development workflow.
+            Connect source control, cloud platforms, and notification services for comprehensive AI security coverage.
+          </p>
+          <div className="hero-stats">
+            <div className="hero-stat">
+              <span className="stat-number">4</span>
+              <span className="stat-label">Source Control</span>
             </div>
-          ))}
-      </div>
-
-      <div className="docs-footer">
-        <div className="help-section">
-          <h3>Need Help?</h3>
-          <p>If you encounter any issues setting up integrations, please contact our support team.</p>
-          <div className="help-links">
-            <a href="/api-docs">API Documentation</a>
-            <a href="mailto:support@nexula.one">Contact Support</a>
+            <div className="hero-stat">
+              <span className="stat-number">3</span>
+              <span className="stat-label">Cloud ML Platforms</span>
+            </div>
+            <div className="hero-stat">
+              <span className="stat-number">3</span>
+              <span className="stat-label">Container Registries</span>
+            </div>
+            <div className="hero-stat">
+              <span className="stat-number">3</span>
+              <span className="stat-label">Notifications</span>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Main Content */}
+      <div className="docs-main">
+        {/* Sidebar */}
+        <aside className="docs-sidebar">
+          <div className="sidebar-section">
+            <h4>Categories</h4>
+            <nav className="sidebar-nav">
+              {categories.map(cat => (
+                <button
+                  key={cat.id}
+                  className={`sidebar-link ${activeCategory === cat.id ? 'active' : ''}`}
+                  onClick={() => setActiveCategory(cat.id)}
+                >
+                  <span className="sidebar-icon">{cat.icon}</span>
+                  <span className="sidebar-label">{cat.name}</span>
+                  <span className="sidebar-count">{cat.count}</span>
+                </button>
+              ))}
+            </nav>
+          </div>
+          <div className="sidebar-section">
+            <h4>Quick Links</h4>
+            <a href="/api-docs" className="sidebar-external-link">
+              <GrBook /> API Documentation
+            </a>
+            <a href="mailto:support@nexula.one" className="sidebar-external-link">
+              <GrShield /> Security Support
+            </a>
+            <a href="https://github.com/nexula-ai/nexula-cli" target="_blank" rel="noopener noreferrer" className="sidebar-external-link">
+              <GrCode /> Nexula CLI
+            </a>
+          </div>
+        </aside>
+
+        {/* Integration Cards */}
+        <div className="docs-content">
+          <div className="content-header">
+            <h2>
+              {activeCategory === 'all'
+                ? 'All Integrations'
+                : categories.find(c => c.id === activeCategory)?.name}
+            </h2>
+            <span className="results-count">{filteredIntegrations.length} integrations</span>
+          </div>
+
+          <div className="integrations-grid">
+            {filteredIntegrations.map((integration) => (
+              <div
+                key={integration.name}
+                className={`integration-card ${expandedCard === integration.name ? 'expanded' : ''}`}
+              >
+                <div className="card-header" onClick={() => toggleCardExpansion(integration.name)}>
+                  <div className="card-icon" style={{ color: integration.color }}>
+                    {integration.icon}
+                  </div>
+                  <div className="card-title">
+                    <h3>{integration.name}</h3>
+                    {getStatusBadge(integration.status)}
+                  </div>
+                  <button className="expand-btn">
+                    {expandedCard === integration.name ? <FaChevronDown /> : <FaChevronRight />}
+                  </button>
+                </div>
+
+                <p className="card-description">{integration.description}</p>
+
+                {expandedCard === integration.name && (
+                  <div className="card-details">
+                    <div className="detail-section">
+                      <h4><FaCog /> Setup Instructions</h4>
+                      <ol className="setup-steps">
+                        {integration.setupSteps.map((step, i) => (
+                          <li key={i}>{step}</li>
+                        ))}
+                      </ol>
+                    </div>
+
+                    <div className="detail-section">
+                      <h4><FaCheckCircle /> Features</h4>
+                      <ul className="features-list">
+                        {integration.features.map((feature, i) => (
+                          <li key={i}>{feature}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="detail-section">
+                      <h4><FaLock /> Required Permissions</h4>
+                      <ul className="permissions-list">
+                        {integration.permissions.map((permission, i) => (
+                          <li key={i}><code>{permission}</code></li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {integration.docsUrl && (
+                      <a href={integration.docsUrl} className="docs-link">
+                        <FaExternalLinkAlt /> View API Documentation
+                      </a>
+                    )}
+                  </div>
+                )}
+
+                <div className="card-actions">
+                  <a
+                    href="https://cloud.nexula.one/integrations"
+                    className="setup-button"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Configure Integration
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {filteredIntegrations.length === 0 && (
+            <div className="no-results">
+              <GrIntegration className="no-results-icon" />
+              <h3>No integrations found</h3>
+              <p>Try adjusting your search or category filter.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="docs-footer">
+        <div className="footer-content">
+          <p>© 2026 Nexula AI. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }

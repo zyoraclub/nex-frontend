@@ -37,7 +37,7 @@ export default function Reports() {
   const [loading, setLoading] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [generating, setGenerating] = useState(false);
-  const [viewingScanId, setViewingScanId] = useState<string | null>(null);
+  const [viewingScanId, setViewingScanId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchReports();
@@ -353,7 +353,7 @@ export default function Reports() {
 
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <button
-                    onClick={() => setViewingScanId(scanId!)}
+                    onClick={() => setViewingScanId(Number(scanId))}
                     style={{
                       flex: 1,
                       padding: '10px 16px',

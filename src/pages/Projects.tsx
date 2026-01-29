@@ -22,8 +22,16 @@ export default function Projects() {
   const [gitlabRepos, setGitlabRepos] = useState<any[]>([]);
   const [bitbucketRepos, setBitbucketRepos] = useState<any[]>([]);
   const [azureRepos, setAzureRepos] = useState<any[]>([]);
+  const [loadingRepos, setLoadingRepos] = useState(false);
   const [sagemakerResources, setSagemakerResources] = useState<any>(null);
   const [huggingfaceResources, setHuggingfaceResources] = useState<any>(null);
+  const [azureMLResources, setAzureMLResources] = useState<any>(null);
+  const [vertexAIResources, setVertexAIResources] = useState<any>(null);
+  const [nvidiaNGCResources, setNvidiaNGCResources] = useState<any>(null);
+  const [jenkinsResources, setJenkinsResources] = useState<any>(null);
+  const [awsECRResources, setAWSECRResources] = useState<any>(null);
+  const [googleARResources, setGoogleARResources] = useState<any>(null);
+  const [azureACRResources, setAzureACRResources] = useState<any>(null);
   const [selectedWorkspace, setSelectedWorkspace] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -79,6 +87,8 @@ export default function Projects() {
 
   const handleCreate = () => {
     setEditingProject(null);
+    setGithubRepos([]);  // Reset repos
+    setLoadingRepos(true);  // Start loading state immediately
     setFormData({
       workspace_id: selectedWorkspace || workspaces[0]?.id || 0,
       project_name: '',
@@ -87,17 +97,21 @@ export default function Projects() {
       repository_url: '',
       repository_name: ''
     });
-    fetchGitHubRepos();
     setShowModal(true);
+    fetchGitHubRepos();  // Fetch after modal is shown
   };
 
   const fetchGitHubRepos = async () => {
+    setLoadingRepos(true);
     try {
       const response = await integrationAPI.getGitHubRepos();
+      console.log('GitHub repos response:', response.data);
       setGithubRepos(response.data.repositories || []);
     } catch (err) {
-      console.error('Failed to fetch GitHub repos');
+      console.error('Failed to fetch GitHub repos:', err);
       setGithubRepos([]);
+    } finally {
+      setLoadingRepos(false);
     }
   };
 
@@ -106,13 +120,8 @@ export default function Projects() {
       const response = await integrationAPI.getGitLabRepos();
       setGitlabRepos(response.data.repositories || []);
     } catch (err: any) {
-      if (err.response?.status === 404) {
-        console.log('GitLab not connected');
-        setGitlabRepos([]);
-      } else {
-        console.error('Failed to fetch GitLab repos');
-        setGitlabRepos([]);
-      }
+      // Integration not connected or error - silently set empty
+      setGitlabRepos([]);
     }
   };
 
@@ -121,13 +130,8 @@ export default function Projects() {
       const response = await integrationAPI.getBitbucketRepos();
       setBitbucketRepos(response.data.repositories || []);
     } catch (err: any) {
-      if (err.response?.status === 404) {
-        console.log('Bitbucket not connected');
-        setBitbucketRepos([]);
-      } else {
-        console.error('Failed to fetch Bitbucket repos');
-        setBitbucketRepos([]);
-      }
+      // Integration not connected or error - silently set empty
+      setBitbucketRepos([]);
     }
   };
 
@@ -136,13 +140,8 @@ export default function Projects() {
       const response = await integrationAPI.getAzureDevOpsRepos();
       setAzureRepos(response.data.repositories || []);
     } catch (err: any) {
-      if (err.response?.status === 404) {
-        console.log('Azure DevOps not connected');
-        setAzureRepos([]);
-      } else {
-        console.error('Failed to fetch Azure DevOps repos');
-        setAzureRepos([]);
-      }
+      // Integration not connected or error - silently set empty
+      setAzureRepos([]);
     }
   };
 
@@ -151,13 +150,8 @@ export default function Projects() {
       const response = await integrationAPI.getSageMakerResources();
       setSagemakerResources(response.data.resources || null);
     } catch (err: any) {
-      if (err.response?.status === 404) {
-        console.log('SageMaker not connected');
-        setSagemakerResources(null);
-      } else {
-        console.error('Failed to fetch SageMaker resources');
-        setSagemakerResources(null);
-      }
+      // Integration not connected or error - silently set null
+      setSagemakerResources(null);
     }
   };
 
@@ -166,13 +160,71 @@ export default function Projects() {
       const response = await integrationAPI.getHuggingFaceResources();
       setHuggingfaceResources(response.data.resources || null);
     } catch (err: any) {
-      if (err.response?.status === 404) {
-        console.log('HuggingFace not connected');
-        setHuggingfaceResources(null);
-      } else {
-        console.error('Failed to fetch HuggingFace resources');
-        setHuggingfaceResources(null);
-      }
+      // Integration not connected or error - silently set null
+      setHuggingfaceResources(null);
+    }
+  };
+
+  const fetchAzureMLResources = async () => {
+    try {
+      const response = await integrationAPI.getAzureMLResources();
+      setAzureMLResources(response.data.resources || null);
+    } catch (err: any) {
+      setAzureMLResources(null);
+    }
+  };
+
+  const fetchVertexAIResources = async () => {
+    try {
+      const response = await integrationAPI.getVertexAIResources();
+      setVertexAIResources(response.data.resources || null);
+    } catch (err: any) {
+      setVertexAIResources(null);
+    }
+  };
+
+  const fetchNVIDIANGCResources = async () => {
+    try {
+      const response = await integrationAPI.getNVIDIANGCResources();
+      setNvidiaNGCResources(response.data.resources || null);
+    } catch (err: any) {
+      setNvidiaNGCResources(null);
+    }
+  };
+
+  const fetchJenkinsResources = async () => {
+    try {
+      const response = await integrationAPI.getJenkinsResources();
+      setJenkinsResources(response.data.resources || null);
+    } catch (err: any) {
+      setJenkinsResources(null);
+    }
+  };
+
+  const fetchAWSECRResources = async () => {
+    try {
+      const response = await integrationAPI.getAWSECRResources();
+      setAWSECRResources(response.data.resources || null);
+    } catch (err: any) {
+      setAWSECRResources(null);
+    }
+  };
+
+  const fetchGoogleARResources = async () => {
+    try {
+      const response = await integrationAPI.getGoogleArtifactRegistryResources();
+      setGoogleARResources(response.data.resources || null);
+    } catch (err: any) {
+      setGoogleARResources(null);
+    }
+  };
+
+  const fetchAzureACRResources = async () => {
+    try {
+      const response = await integrationAPI.getAzureContainerRegistryResources();
+      setAzureACRResources(response.data.resources || null);
+    } catch (err: any) {
+      setAzureACRResources(null);
     }
   };
 
@@ -190,6 +242,20 @@ export default function Projects() {
       fetchSageMakerResources();
     } else if (sourceType === 'huggingface') {
       fetchHuggingFaceResources();
+    } else if (sourceType === 'azure_ml') {
+      fetchAzureMLResources();
+    } else if (sourceType === 'vertex_ai') {
+      fetchVertexAIResources();
+    } else if (sourceType === 'nvidia_ngc') {
+      fetchNVIDIANGCResources();
+    } else if (sourceType === 'jenkins') {
+      fetchJenkinsResources();
+    } else if (sourceType === 'aws_ecr') {
+      fetchAWSECRResources();
+    } else if (sourceType === 'google_artifact_registry') {
+      fetchGoogleARResources();
+    } else if (sourceType === 'azure_container_registry') {
+      fetchAzureACRResources();
     }
   };
 
@@ -380,16 +446,40 @@ export default function Projects() {
                   onChange={(e) => handleSourceTypeChange(e.target.value)}
                   required
                 >
-                  <option value="github">GitHub</option>
-                  <option value="gitlab">GitLab</option>
-                  <option value="bitbucket">Bitbucket</option>
-                  <option value="azuredevops">Azure DevOps</option>
-                  <option value="aws_sagemaker">AWS SageMaker</option>
-                  <option value="huggingface">HuggingFace</option>
-                  <option value="local">Local</option>
+                  <optgroup label="Source Control">
+                    <option value="github">GitHub</option>
+                    <option value="gitlab">GitLab</option>
+                    <option value="bitbucket">Bitbucket</option>
+                    <option value="azuredevops">Azure DevOps</option>
+                  </optgroup>
+                  <optgroup label="ML Platforms">
+                    <option value="aws_sagemaker">AWS SageMaker</option>
+                    <option value="azure_ml">Azure Machine Learning</option>
+                    <option value="vertex_ai">Google Vertex AI</option>
+                    <option value="huggingface">HuggingFace</option>
+                    <option value="nvidia_ngc">NVIDIA NGC</option>
+                  </optgroup>
+                  <optgroup label="Container Registries">
+                    <option value="aws_ecr">AWS ECR</option>
+                    <option value="google_artifact_registry">Google Artifact Registry</option>
+                    <option value="azure_container_registry">Azure Container Registry</option>
+                  </optgroup>
+                  <optgroup label="CI/CD">
+                    <option value="jenkins">Jenkins</option>
+                  </optgroup>
+                  <optgroup label="Other">
+                    <option value="local">Local</option>
+                  </optgroup>
                 </select>
               </div>
-              {formData.source_type === 'github' && githubRepos.length > 0 && (
+              {formData.source_type === 'github' && loadingRepos && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px', color: '#888888' }}>
+                    Loading repositories...
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'github' && !loadingRepos && githubRepos.length > 0 && (
                 <div className="form-group">
                   <label>Select Repository</label>
                   <select
@@ -404,6 +494,13 @@ export default function Projects() {
                       <option key={idx} value={repo.name}>{repo.name}</option>
                     ))}
                   </select>
+                </div>
+              )}
+              {formData.source_type === 'github' && !loadingRepos && githubRepos.length === 0 && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px', color: '#888888' }}>
+                    ⚠️ GitHub not connected or no repositories found. <a href={`/${orgSlug}/integrations/github`} style={{ color: '#fec76f', textDecoration: 'underline' }}>Connect GitHub</a> to fetch repositories.
+                  </div>
                 </div>
               )}
               {formData.source_type === 'gitlab' && gitlabRepos.length > 0 && (
@@ -525,7 +622,147 @@ export default function Projects() {
                   </div>
                 </div>
               )}
-              {formData.source_type !== 'aws_sagemaker' && formData.source_type !== 'huggingface' && (
+              {formData.source_type === 'azure_ml' && azureMLResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px' }}>
+                    <div style={{ marginBottom: '8px', color: '#fec76f', fontWeight: 500 }}>✅ Azure ML Connected</div>
+                    <div style={{ color: '#888888', fontSize: '12px' }}>
+                      🤖 {azureMLResources.models?.length || 0} models, {azureMLResources.endpoints?.length || 0} endpoints, {azureMLResources.compute?.length || 0} compute instances
+                    </div>
+                    <div style={{ marginTop: '8px', color: '#666666', fontSize: '11px' }}>
+                      AIBOM will automatically discover all Azure ML resources
+                    </div>
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'azure_ml' && !azureMLResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px', color: '#888888' }}>
+                    ⚠️ Azure ML not connected. <a href={`/${orgSlug}/integrations/azure-ml`} style={{ color: '#fec76f', textDecoration: 'underline' }}>Connect Azure ML</a> to discover resources.
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'vertex_ai' && vertexAIResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px' }}>
+                    <div style={{ marginBottom: '8px', color: '#fec76f', fontWeight: 500 }}>✅ Vertex AI Connected</div>
+                    <div style={{ color: '#888888', fontSize: '12px' }}>
+                      🔷 {vertexAIResources.models?.length || 0} models, {vertexAIResources.endpoints?.length || 0} endpoints, {vertexAIResources.training_pipelines?.length || 0} pipelines
+                    </div>
+                    <div style={{ marginTop: '8px', color: '#666666', fontSize: '11px' }}>
+                      AIBOM will automatically discover all Vertex AI resources
+                    </div>
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'vertex_ai' && !vertexAIResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px', color: '#888888' }}>
+                    ⚠️ Vertex AI not connected. <a href={`/${orgSlug}/integrations/vertex-ai`} style={{ color: '#fec76f', textDecoration: 'underline' }}>Connect Vertex AI</a> to discover resources.
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'nvidia_ngc' && nvidiaNGCResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px' }}>
+                    <div style={{ marginBottom: '8px', color: '#fec76f', fontWeight: 500 }}>✅ NVIDIA NGC Connected</div>
+                    <div style={{ color: '#888888', fontSize: '12px' }}>
+                      🎮 {nvidiaNGCResources.containers?.length || 0} containers, {nvidiaNGCResources.models?.length || 0} models, {nvidiaNGCResources.helm_charts?.length || 0} Helm charts
+                    </div>
+                    <div style={{ marginTop: '8px', color: '#666666', fontSize: '11px' }}>
+                      AIBOM will automatically discover all NGC resources
+                    </div>
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'nvidia_ngc' && !nvidiaNGCResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px', color: '#888888' }}>
+                    ⚠️ NVIDIA NGC not connected. <a href={`/${orgSlug}/integrations/nvidia-ngc`} style={{ color: '#fec76f', textDecoration: 'underline' }}>Connect NVIDIA NGC</a> to discover resources.
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'jenkins' && jenkinsResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px' }}>
+                    <div style={{ marginBottom: '8px', color: '#fec76f', fontWeight: 500 }}>✅ Jenkins Connected</div>
+                    <div style={{ color: '#888888', fontSize: '12px' }}>
+                      🔧 {jenkinsResources.jobs?.length || 0} jobs, {jenkinsResources.pipelines?.length || 0} pipelines, {jenkinsResources.nodes?.length || 0} nodes
+                    </div>
+                    <div style={{ marginTop: '8px', color: '#666666', fontSize: '11px' }}>
+                      AIBOM will integrate with Jenkins CI/CD pipelines
+                    </div>
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'jenkins' && !jenkinsResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px', color: '#888888' }}>
+                    ⚠️ Jenkins not connected. <a href={`/${orgSlug}/integrations/jenkins`} style={{ color: '#fec76f', textDecoration: 'underline' }}>Connect Jenkins</a> to discover pipelines.
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'aws_ecr' && awsECRResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px' }}>
+                    <div style={{ marginBottom: '8px', color: '#fec76f', fontWeight: 500 }}>✅ AWS ECR Connected</div>
+                    <div style={{ color: '#888888', fontSize: '12px' }}>
+                      🐳 {awsECRResources.repositories?.length || 0} repositories, {awsECRResources.images?.length || 0} images
+                    </div>
+                    <div style={{ marginTop: '8px', color: '#666666', fontSize: '11px' }}>
+                      AIBOM will scan container images for vulnerabilities
+                    </div>
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'aws_ecr' && !awsECRResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px', color: '#888888' }}>
+                    ⚠️ AWS ECR not connected. <a href={`/${orgSlug}/integrations/aws-ecr`} style={{ color: '#fec76f', textDecoration: 'underline' }}>Connect AWS ECR</a> to scan images.
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'google_artifact_registry' && googleARResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px' }}>
+                    <div style={{ marginBottom: '8px', color: '#fec76f', fontWeight: 500 }}>✅ Google Artifact Registry Connected</div>
+                    <div style={{ color: '#888888', fontSize: '12px' }}>
+                      🐳 {googleARResources.repositories?.length || 0} repositories, {googleARResources.images?.length || 0} images
+                    </div>
+                    <div style={{ marginTop: '8px', color: '#666666', fontSize: '11px' }}>
+                      AIBOM will scan container images for vulnerabilities
+                    </div>
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'google_artifact_registry' && !googleARResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px', color: '#888888' }}>
+                    ⚠️ Google Artifact Registry not connected. <a href={`/${orgSlug}/integrations/google-artifact-registry`} style={{ color: '#fec76f', textDecoration: 'underline' }}>Connect Artifact Registry</a> to scan images.
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'azure_container_registry' && azureACRResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px' }}>
+                    <div style={{ marginBottom: '8px', color: '#fec76f', fontWeight: 500 }}>✅ Azure Container Registry Connected</div>
+                    <div style={{ color: '#888888', fontSize: '12px' }}>
+                      🐳 {azureACRResources.repositories?.length || 0} repositories, {azureACRResources.images?.length || 0} images
+                    </div>
+                    <div style={{ marginTop: '8px', color: '#666666', fontSize: '11px' }}>
+                      AIBOM will scan container images for vulnerabilities
+                    </div>
+                  </div>
+                </div>
+              )}
+              {formData.source_type === 'azure_container_registry' && !azureACRResources && (
+                <div className="form-group">
+                  <div style={{ padding: '12px', background: '#1a1a1a', borderRadius: '6px', fontSize: '13px', color: '#888888' }}>
+                    ⚠️ Azure Container Registry not connected. <a href={`/${orgSlug}/integrations/azure-container-registry`} style={{ color: '#fec76f', textDecoration: 'underline' }}>Connect ACR</a> to scan images.
+                  </div>
+                </div>
+              )}
+              {!['aws_sagemaker', 'huggingface', 'azure_ml', 'vertex_ai', 'nvidia_ngc', 'jenkins', 'aws_ecr', 'google_artifact_registry', 'azure_container_registry'].includes(formData.source_type) && (
               <>
               <div className="form-group">
                 <label>Repository URL</label>

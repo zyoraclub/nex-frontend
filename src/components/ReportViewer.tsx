@@ -53,6 +53,7 @@ const LANGUAGES = [
 export default function ReportViewer({ scanId, reportType = 'cert_in', onClose }: ReportViewerProps) {
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
 
   useEffect(() => {
     fetchReportData();

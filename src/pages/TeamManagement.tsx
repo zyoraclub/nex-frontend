@@ -25,10 +25,9 @@ export default function TeamManagement() {
     try {
       const response = await api.get('/workspaces/');
       const ws = response.data.find((w: any) => w.workspace_name.toLowerCase().replace(/\s+/g, '-') === workspaceSlug);
-      console.log('Found workspace:', ws);
       setWorkspace(ws);
     } catch (err) {
-      console.error('Failed to fetch workspace:', err);
+      // Failed to fetch workspace
     }
   };
 
@@ -41,7 +40,7 @@ export default function TeamManagement() {
         setMembers(membersResponse.data.members);
       }
     } catch (err) {
-      console.error('Failed to fetch members');
+      // Failed to fetch members
     } finally {
       setLoading(false);
     }
@@ -56,7 +55,7 @@ export default function TeamManagement() {
         setInvitations(invitationsResponse.data.invitations);
       }
     } catch (err) {
-      console.error('Failed to fetch invitations');
+      // Failed to fetch invitations
     }
   };
 
@@ -64,7 +63,6 @@ export default function TeamManagement() {
     if (!inviteEmail || !workspace) return;
 
     try {
-      console.log('Sending invitation:', { workspace_id: workspace.id, email: inviteEmail, role: inviteRole });
       await api.post(`/workspaces/${workspace.id}/invite`, {
         email: inviteEmail,
         role: inviteRole

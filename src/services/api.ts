@@ -34,17 +34,39 @@ api.interceptors.response.use(
 export const authAPI = {
   register: (data: { organization_name: string; email: string; password: string }) =>
     api.post('/auth/register', data),
-  
+
   verifyOTP: (data: { email: string; otp: string }) =>
     api.post('/auth/verify-otp', data),
-  
+
   resendOTP: (email: string) =>
     api.post('/auth/resend-otp', { email }),
-  
+
   login: (data: { email: string; password: string }) =>
     api.post('/auth/login', data),
-  
+
+  verify2FALogin: (data: { email: string; code: string; temp_token: string }) =>
+    api.post('/auth/login/2fa-verify', data),
+
+  resend2FACode: (data: { email: string; temp_token: string }) =>
+    api.post('/auth/login/resend-2fa', data),
+
   getMe: () => api.get('/auth/me'),
+
+  // OAuth
+  getOAuthUrl: (provider: 'github' | 'google') =>
+    api.get(`/auth/oauth/${provider}`),
+
+  oauthCallback: (provider: string, code: string) =>
+    api.post(`/auth/oauth/${provider}/callback`, null, { params: { code } }),
+
+  completeOAuthRegistration: (data: {
+    organization_name: string;
+    email: string;
+    name?: string;
+    avatar_url?: string;
+    provider?: string;
+    provider_id?: string;
+  }) => api.post('/auth/oauth/complete', null, { params: data }),
 };
 
 export default api;

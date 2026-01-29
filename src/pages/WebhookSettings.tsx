@@ -9,7 +9,8 @@ export default function WebhookSettings() {
   const { orgSlug } = useParams();
   const [copied, setCopied] = useState<string | null>(null);
   
-  const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  // Use environment variable, fallback to production URL
+  const backendUrl = import.meta.env.VITE_API_URL || 'https://api.nexula.one';
   
   const webhooks = [
     {

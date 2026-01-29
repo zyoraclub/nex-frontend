@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './AttackTheater.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const WS_URL = API_URL.replace('http://', 'ws://').replace('https://', 'wss://');
+
 interface AttackStep {
   step: number;
   name: string;
@@ -29,18 +32,18 @@ export const AttackTheater: React.FC<AttackTheaterProps> = ({ simulationId, atta
 
   useEffect(() => {
     // Connect to WebSocket for real-time updates
-    const ws = new WebSocket(`ws://localhost:8000/api/v1/attack-simulation/ws/${simulationId}`);
+    const ws = new WebSocket(`${WS_URL}/api/v1/attack-simulation/ws/${simulationId}`);
     wsRef.current = ws;
 
     ws.onopen = () => {
-      console.log('Attack simulation WebSocket connected');
+      // WebSocket connected
     };
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
       if (data.type === 'status') {
-        console.log('Status:', data.message);
+        // Status update received
       } else if (data.type === 'step') {
         const step: AttackStep = {
           step: data.data.step_number,
@@ -74,12 +77,12 @@ export const AttackTheater: React.FC<AttackTheaterProps> = ({ simulationId, atta
       }
     };
 
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
+    ws.onerror = () => {
+      // WebSocket error
     };
 
     ws.onclose = () => {
-      console.log('WebSocket closed');
+      // WebSocket closed
     };
 
     return () => {

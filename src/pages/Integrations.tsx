@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/layout/DashboardLayout';
-import { SiGithubactions, SiHuggingface } from 'react-icons/si';
+import { SiGithubactions, SiHuggingface, SiNvidia, SiJenkins } from 'react-icons/si';
 import { VscAzureDevops } from 'react-icons/vsc';
-import { FaGithub, FaGitlab, FaSlack, FaAws, FaDocker, FaGoogle } from 'react-icons/fa';
+import { FaGithub, FaGitlab, FaSlack, FaAws, FaDocker, FaGoogle, FaMicrosoft } from 'react-icons/fa';
 import { IoLogoBitbucket } from 'react-icons/io';
 import { SiJira, SiPagerduty } from 'react-icons/si';
 
@@ -150,6 +150,46 @@ export default function Integrations() {
       path: `/${orgSlug}/integrations/huggingface`,
       enabled: true,
       status: 'ML Platform'
+    },
+    {
+      id: 'azure-ml',
+      name: 'Azure Machine Learning',
+      description: 'Discover and scan ML models, endpoints, compute, and jobs',
+      Icon: FaMicrosoft,
+      color: '#0078D4',
+      path: `/${orgSlug}/integrations/azure-ml`,
+      enabled: true,
+      status: 'ML Platform'
+    },
+    {
+      id: 'vertex-ai',
+      name: 'Google Vertex AI',
+      description: 'Discover and scan ML models, endpoints, and training jobs',
+      Icon: FaGoogle,
+      color: '#4285F4',
+      path: `/${orgSlug}/integrations/vertex-ai`,
+      enabled: true,
+      status: 'ML Platform'
+    },
+    {
+      id: 'nvidia-ngc',
+      name: 'NVIDIA NGC',
+      description: 'Access GPU-optimized containers, pre-trained models, and NVIDIA NIM',
+      Icon: SiNvidia,
+      color: '#76b900',
+      path: `/${orgSlug}/integrations/nvidia-ngc`,
+      enabled: true,
+      status: 'GPU Cloud'
+    },
+    {
+      id: 'jenkins',
+      name: 'Jenkins',
+      description: 'Trigger security scans from Jenkins CI/CD pipelines',
+      Icon: SiJenkins,
+      color: '#D24939',
+      path: `/${orgSlug}/integrations/jenkins`,
+      enabled: true,
+      status: 'CI/CD'
     }
   ];
 

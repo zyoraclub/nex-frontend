@@ -153,3 +153,134 @@
 .auth-link a:hover {
   color: var(--accent-hover);
 }
+
+/* OAuth Buttons */
+.oauth-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.oauth-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.oauth-btn.github {
+  background: #24292e;
+  border: 1px solid #444;
+  color: #fff;
+}
+
+.oauth-btn.github:hover {
+  background: #2d3339;
+  border-color: #555;
+}
+
+.oauth-btn.google {
+  background: #0a0a0a;
+  border: 1px solid #333;
+  color: #fff;
+}
+
+.oauth-btn.google:hover {
+  background: #111;
+  border-color: #444;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #222;
+}
+
+.auth-divider span {
+  padding: 0 12px;
+  color: #666;
+  font-size: 12px;
+}
+
+/* OAuth User Info (Complete Registration) */
+.oauth-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #0a0a0a;
+  border: 1px solid #222;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.oauth-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #333;
+}
+
+.oauth-user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.oauth-email {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.oauth-provider {
+  font-size: 12px;
+  color: #888;
+}
+
+.form-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #666;
+}
+
+/* OAuth Loading Spinner */
+.oauth-loading {
+  padding: 40px 0;
+}
+
+.oauth-loading h2 {
+  margin: 16px 0 8px;
+  font-size: 20px;
+  color: #fff;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+  border: 3px solid #222;
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

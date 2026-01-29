@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { GrLogout, GrAppsRounded, GrCompliance, GrLineChart, GrServer, GrCube, GrConnect, GrList, GrBook, GrCode, GrDown, GrUp } from 'react-icons/gr';
+import { GrLogout, GrAppsRounded, GrCompliance, GrLineChart, GrServer, GrCube, GrConnect, GrList, GrBook, GrCode, GrDown, GrUp, GrConfigure } from 'react-icons/gr';
 import { PiWebhooksLogo } from 'react-icons/pi';
 import { authAPI } from '../../services/api';
 import './Layout.css';
@@ -41,6 +41,7 @@ export default function Sidebar() {
     { name: 'Integrations', icon: <GrConnect />, path: `/${orgSlug}/integrations` },
     { name: 'Webhooks', icon: <PiWebhooksLogo />, path: `/${orgSlug}/settings/webhooks` },
     { name: 'Audit Logs', icon: <GrList />, path: `/${orgSlug}/audit-logs` },
+    { name: 'Settings', icon: <GrConfigure />, path: `/${orgSlug}/settings/account` },
   ];
 
   const developerItems = [

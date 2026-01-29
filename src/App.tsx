@@ -39,6 +39,10 @@ import GoogleArtifactRegistryIntegration from './pages/GoogleArtifactRegistryInt
 import AzureContainerRegistryIntegration from './pages/AzureContainerRegistryIntegration';
 import HuggingFaceIntegration from './pages/HuggingFaceIntegration';
 import HuggingFaceDetails from './pages/HuggingFaceDetails';
+import AzureMLIntegration from './pages/AzureMLIntegration';
+import VertexAIIntegration from './pages/VertexAIIntegration';
+import NVIDIANGCIntegration from './pages/NVIDIANGCIntegration';
+import JenkinsIntegration from './pages/JenkinsIntegration';
 import ApiKeys from './pages/ApiKeys';
 import ApiDocumentation from './pages/ApiDocumentation';
 import IntegrationsDocumentation from './pages/IntegrationsDocumentation';
@@ -47,12 +51,21 @@ import AttackSimulation from './pages/AttackSimulation';
 import Scoring from './pages/Scoring';
 import Fingerprinting from './pages/Fingerprinting';
 import SecurityGate from './pages/SecurityGate';
+import PromptFirewall from './pages/PromptFirewall';
+import ModelDrift from './pages/ModelDrift';
+import SBOMExport from './pages/SBOMExport';
+import OrgSBOMExport from './pages/OrgSBOMExport';
+import Settings from './pages/Settings';
+import OAuthCallback from './pages/OAuthCallback';
+import CompleteOAuthRegistration from './pages/CompleteOAuthRegistration';
+import { NotificationProvider } from './contexts/NotificationContext';
 
 function App() {
   return (
     <BrowserRouter>
-      <SecurityCopilot />
-      <Routes>
+      <NotificationProvider>
+        <SecurityCopilot />
+        <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/api-docs" element={<ApiDocumentation />} />
         <Route path="/integrations-docs" element={<IntegrationsDocumentation />} />
@@ -60,6 +73,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/oauth/:provider/callback" element={<OAuthCallback />} />
+        <Route path="/complete-registration" element={<CompleteOAuthRegistration />} />
         <Route path="/:orgSlug/dashboard" element={<Dashboard />} />
         <Route path="/:orgSlug/trends" element={<Trends />} />
         <Route path="/:orgSlug/audit-logs" element={<AuditLogs />} />
@@ -70,11 +85,16 @@ function App() {
         <Route path="/:orgSlug/:workspaceSlug/team" element={<TeamManagement />} />
         <Route path="/:orgSlug/:workspaceSlug/policies" element={<ScanPolicies />} />
         <Route path="/:orgSlug/settings/notifications" element={<NotificationSettings />} />
+        <Route path="/:orgSlug/settings/account" element={<Settings />} />
         <Route path="/:orgSlug/projects" element={<Projects />} />
         <Route path="/:orgSlug/projects/:projectSlug" element={<ProjectDetails />} />
         <Route path="/:orgSlug/projects/:projectSlug/scoring" element={<Scoring />} />
         <Route path="/:orgSlug/projects/:projectSlug/fingerprinting" element={<Fingerprinting />} />
         <Route path="/:orgSlug/projects/:projectSlug/security-gate" element={<SecurityGate />} />
+        <Route path="/:orgSlug/projects/:projectSlug/prompt-firewall" element={<PromptFirewall />} />
+        <Route path="/:orgSlug/projects/:projectSlug/model-drift" element={<ModelDrift />} />
+        <Route path="/:orgSlug/projects/:projectSlug/sbom-export" element={<SBOMExport />} />
+        <Route path="/:orgSlug/sbom-export" element={<OrgSBOMExport />} />
         <Route path="/:orgSlug/projects/:projectSlug/scans" element={<ScanHistory />} />
         <Route path="/:orgSlug/projects/:projectSlug/scans/:scanId" element={<ScanDetails />} />
         <Route path="/:orgSlug/projects/:projectSlug/attack-simulation" element={<AttackSimulation />} />
@@ -89,6 +109,10 @@ function App() {
         <Route path="/:orgSlug/integrations/google-artifact-registry" element={<GoogleArtifactRegistryIntegration />} />
         <Route path="/:orgSlug/integrations/azure-container-registry" element={<AzureContainerRegistryIntegration />} />
         <Route path="/:orgSlug/integrations/huggingface" element={<HuggingFaceDetails />} />
+        <Route path="/:orgSlug/integrations/azure-ml" element={<AzureMLIntegration />} />
+        <Route path="/:orgSlug/integrations/vertex-ai" element={<VertexAIIntegration />} />
+        <Route path="/:orgSlug/integrations/nvidia-ngc" element={<NVIDIANGCIntegration />} />
+        <Route path="/:orgSlug/integrations/jenkins" element={<JenkinsIntegration />} />
         <Route path="/:orgSlug/integrations/github-actions" element={<GitHubActionsIntegration />} />
         <Route path="/:orgSlug/integrations/gitlab" element={<GitLabIntegration />} />
         <Route path="/:orgSlug/integrations/gitlab-oauth" element={<GitLabDetails />} />
@@ -103,6 +127,7 @@ function App() {
         <Route path="/gitlab-callback" element={<GitLabCallback />} />
         <Route path="/bitbucket-callback" element={<BitbucketCallback />} />
       </Routes>
+      </NotificationProvider>
     </BrowserRouter>
   );
 }

@@ -10,7 +10,7 @@ import { aibomAPI } from '../services/aibomAPI';
 import { scannerAPI, type ScannerRun } from '../services/scannerAPI';
 import type { Project } from '../services/projectAPI';
 import type { AIBOM } from '../services/aibomAPI';
-import { GrDocumentText, GrScan, GrDocument, GrVulnerability, GrShield } from 'react-icons/gr';
+import { GrDocumentText, GrScan, GrDocument, GrVulnerability, GrShield, GrTree, GrLineChart, GrDownload, GrSecure } from 'react-icons/gr';
 import { PiTarget } from 'react-icons/pi';
 import { BsFillMenuAppFill } from 'react-icons/bs';
 import { SiOpenaigym } from 'react-icons/si';
@@ -18,6 +18,7 @@ import { GoContainer } from 'react-icons/go';
 import { FaCode } from 'react-icons/fa';
 import './ProjectDetails.css';
 import { SecurityScoreCard } from '../components/SecurityScore';
+import DependencyGraph from '../components/DependencyGraph';
 
 export default function ProjectDetails() {
   const { projectSlug } = useParams();
@@ -224,12 +225,16 @@ export default function ProjectDetails() {
   }
 
   const tabs = [
-    { id: 'aibom', label: 'AIBOM', icon: <GrDocumentText size={14} /> },
-    { id: 'scans', label: 'Scans', icon: <GrScan size={14} /> },
-    { id: 'scoring', label: 'Scoring', icon: <GrShield size={14} /> },
-    { id: 'fingerprinting', label: 'Fingerprinting', icon: <GrShield size={14} /> },
-    { id: 'security-gate', label: 'Security Gate', icon: <GrShield size={14} /> },
-    { id: 'reports', label: 'Reports', icon: <GrDocument size={14} /> }
+    { id: 'aibom', label: 'AIBOM', icon: <GrDocumentText size={12} /> },
+    { id: 'dependency-graph', label: 'Dependencies', icon: <GrTree size={12} /> },
+    { id: 'scans', label: 'Scans', icon: <GrScan size={12} /> },
+    { id: 'scoring', label: 'Scoring', icon: <GrShield size={12} /> },
+    { id: 'fingerprinting', label: 'Fingerprinting', icon: <GrShield size={12} /> },
+    { id: 'model-drift', label: 'Model Drift', icon: <GrLineChart size={12} /> },
+    { id: 'security-gate', label: 'Security Gate', icon: <GrShield size={12} /> },
+    { id: 'prompt-firewall', label: 'Prompt Firewall', icon: <GrSecure size={12} /> },
+    { id: 'sbom-export', label: 'SBOM Export', icon: <GrDownload size={12} /> },
+    { id: 'reports', label: 'Reports', icon: <GrDocument size={12} /> }
   ];
 
   const handleTabClick = (tabId: string) => {
@@ -242,6 +247,12 @@ export default function ProjectDetails() {
       navigate(`/${orgSlug}/projects/${projectSlug}/fingerprinting`);
     } else if (tabId === 'security-gate') {
       navigate(`/${orgSlug}/projects/${projectSlug}/security-gate`);
+    } else if (tabId === 'prompt-firewall') {
+      navigate(`/${orgSlug}/projects/${projectSlug}/prompt-firewall`);
+    } else if (tabId === 'model-drift') {
+      navigate(`/${orgSlug}/projects/${projectSlug}/model-drift`);
+    } else if (tabId === 'sbom-export') {
+      navigate(`/${orgSlug}/projects/${projectSlug}/sbom-export`);
     } else {
       setActiveTab(tabId);
     }
@@ -387,6 +398,26 @@ export default function ProjectDetails() {
               <div className="empty-state">
                 <p>No AIBOM generated yet</p>
                 <span>Generate an AIBOM to discover AI/ML assets and dependencies</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'dependency-graph' && (
+          <div className="tab-content">
+            <div className="content-header">
+              <h2>Dependency Graph</h2>
+              <p style={{ color: '#888', fontSize: '13px', margin: 0 }}>
+                Interactive visualization of AI/ML assets and their relationships
+              </p>
+            </div>
+
+            {aibom?.status === 'completed' ? (
+              <DependencyGraph projectId={project.id} showVulnerabilities={true} />
+            ) : (
+              <div className="empty-state">
+                <p>Generate AIBOM first</p>
+                <span>An AIBOM is required to visualize the dependency graph</span>
               </div>
             )}
           </div>

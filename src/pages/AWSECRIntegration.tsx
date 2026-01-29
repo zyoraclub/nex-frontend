@@ -438,7 +438,7 @@ export default function AWSECRIntegration() {
                       {image.vulnerabilities && Object.keys(image.vulnerabilities).length > 0 && (
                         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                           {Object.entries(image.vulnerabilities).map(([severity, count]) => (
-                            count > 0 && (
+                            (count as number) > 0 && (
                               <span key={severity} style={{
                                 padding: '4px 8px',
                                 background: `${getSeverityColor(severity)}20`,
@@ -451,7 +451,7 @@ export default function AWSECRIntegration() {
                                 gap: '4px'
                               }}>
                                 <FaExclamationTriangle />
-                                {severity}: {count}
+                                {severity}: {count as number}
                               </span>
                             )
                           ))}

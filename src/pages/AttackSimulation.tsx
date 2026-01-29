@@ -4,6 +4,8 @@ import DashboardLayout from '../components/layout/DashboardLayout';
 import { AttackTheater } from '../components/attack/AttackTheater';
 import './AttackSimulation.css';
 
+const API_URL = import.meta.env.VITE_API_URL || '${API_URL}';
+
 interface AttackType {
   id: string;
   name: string;
@@ -54,7 +56,7 @@ const AttackSimulation: React.FC = () => {
       const token = localStorage.getItem('token');
       
       // Get all projects and find by slug
-      const projectsResponse = await fetch('http://localhost:8000/api/v1/projects', {
+      const projectsResponse = await fetch(`${API_URL}/api/v1/projects`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const projectsData = await projectsResponse.json();
@@ -68,7 +70,7 @@ const AttackSimulation: React.FC = () => {
         return;
       }
       
-      const simResponse = await fetch('http://localhost:8000/api/v1/attack-simulation/start', {
+      const simResponse = await fetch(`${API_URL}/api/v1/attack-simulation/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,8 +94,8 @@ const AttackSimulation: React.FC = () => {
     }
   };
 
-  const handleComplete = (results: any[]) => {
-    console.log('Attack simulation completed:', results);
+  const handleComplete = (_results: any[]) => {
+    // Attack simulation completed - results are displayed in the UI
   };
 
   const resetSimulation = () => {

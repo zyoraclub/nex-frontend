@@ -1,0 +1,747 @@
+.org-sbom-container {
+  padding: 24px;
+  background: #000000;
+  min-height: 100vh;
+}
+
+.org-sbom-header {
+  margin-bottom: 24px;
+}
+
+.org-sbom-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+}
+
+.org-sbom-header p {
+  font-size: 12px;
+  color: #888888;
+  margin: 0;
+}
+
+.org-sbom-loading {
+  padding: 40px;
+  text-align: center;
+  font-size: 12px;
+  color: #888888;
+}
+
+.org-sbom-error {
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid #ff4444;
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #ff4444;
+  margin-bottom: 24px;
+}
+
+/* Tabs */
+.org-sbom-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #1a1a1a;
+  padding-bottom: 12px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #333 transparent;
+}
+
+.org-sbom-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.org-sbom-tabs::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.org-sbom-tabs::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 2px;
+}
+
+.org-sbom-tabs button {
+  padding: 8px 10px;
+  background: transparent;
+  border: 1px solid #333333;
+  border-radius: 6px;
+  color: #888888;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.org-sbom-tabs button:hover {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+
+.org-sbom-tabs button.active {
+  background: #fec76f;
+  border-color: #fec76f;
+  color: #000000;
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Compliance Cards */
+.compliance-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.compliance-card {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.compliance-card.compliant {
+  border-color: #4caf50;
+}
+
+.compliance-card.non-compliant {
+  border-color: #ff4444;
+}
+
+.compliance-card.coverage {
+  border-color: #fec76f;
+}
+
+.card-icon {
+  font-size: 32px;
+}
+
+.card-content h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+}
+
+.card-content .status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.status.compliant {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+}
+
+.status.non-compliant {
+  background: rgba(255, 68, 68, 0.15);
+  color: #ff4444;
+}
+
+.coverage-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fec76f;
+}
+
+/* Summary Sections */
+.summary-section {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.summary-section h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+}
+
+.summary-grid,
+.component-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 16px;
+}
+
+.summary-item,
+.component-item {
+  text-align: center;
+  padding: 16px;
+  background: #000000;
+  border-radius: 6px;
+}
+
+.summary-item.success {
+  border: 1px solid #4caf50;
+}
+
+.summary-item.warning {
+  border: 1px solid #ff9800;
+}
+
+.summary-item .value,
+.component-item .value {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.summary-item .label,
+.component-item .label {
+  font-size: 10px;
+  color: #888888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.component-item .value {
+  color: #fec76f;
+}
+
+/* Vulnerability Grid */
+.vuln-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.vuln-item {
+  text-align: center;
+  padding: 16px;
+  background: #000000;
+  border-radius: 6px;
+}
+
+.vuln-item.critical {
+  border: 1px solid #ff4444;
+}
+
+.vuln-item.high {
+  border: 1px solid #ff9800;
+}
+
+.vuln-item.medium {
+  border: 1px solid #fec76f;
+}
+
+.vuln-item.low {
+  border: 1px solid #4caf50;
+}
+
+.vuln-item .value {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.vuln-item.critical .value { color: #ff4444; }
+.vuln-item.high .value { color: #ff9800; }
+.vuln-item.medium .value { color: #fec76f; }
+.vuln-item.low .value { color: #4caf50; }
+
+.vuln-item .label {
+  font-size: 10px;
+  color: #888888;
+  text-transform: uppercase;
+}
+
+/* Export Section */
+.export-section {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.export-section h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+}
+
+.format-options,
+.type-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.format-option,
+.type-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  background: #000000;
+  border: 2px solid #1a1a1a;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.format-option:hover,
+.type-option:hover {
+  border-color: #333333;
+}
+
+.format-option.selected,
+.type-option.selected {
+  border-color: #fec76f;
+  background: rgba(254, 199, 111, 0.05);
+}
+
+.format-option input,
+.type-option input {
+  margin-top: 2px;
+  accent-color: #fec76f;
+}
+
+.format-info,
+.type-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.format-name,
+.type-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.format-desc,
+.type-desc {
+  font-size: 11px;
+  color: #888888;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.checkbox-option input {
+  width: 16px;
+  height: 16px;
+  accent-color: #fec76f;
+}
+
+.checkbox-option.select-all {
+  padding: 12px;
+  background: #000000;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+/* Project List */
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.project-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #000000;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.project-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.project-item input {
+  accent-color: #fec76f;
+}
+
+.project-name {
+  flex: 1;
+}
+
+.no-aibom-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  background: rgba(255, 68, 68, 0.15);
+  color: #ff4444;
+  border-radius: 3px;
+}
+
+/* Export Actions */
+.export-actions {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.export-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 40px;
+  background: #fec76f;
+  color: #000000;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.export-btn:hover:not(:disabled) {
+  background: #ffd180;
+}
+
+.export-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #000000;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.export-success {
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid #4caf50;
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #4caf50;
+}
+
+.success-icon {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Compliance Tab */
+.compliance-overview {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.compliance-score {
+  display: flex;
+  gap: 40px;
+}
+
+.score-circle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  background: #0a0a0a;
+  border: 3px solid #fec76f;
+  border-radius: 50%;
+}
+
+.score-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fec76f;
+}
+
+.score-label {
+  font-size: 11px;
+  color: #888888;
+  text-transform: uppercase;
+}
+
+/* Requirements */
+.requirements-section,
+.recommendations-section,
+.project-compliance-section {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.requirements-section h3,
+.recommendations-section h3,
+.project-compliance-section h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+}
+
+.requirements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.requirement-item {
+  padding: 16px;
+  background: #000000;
+  border-radius: 8px;
+  border-left: 3px solid #333333;
+}
+
+.requirement-item.compliant {
+  border-left-color: #4caf50;
+}
+
+.requirement-item.partial {
+  border-left-color: #fec76f;
+}
+
+.requirement-item.non_compliant {
+  border-left-color: #ff4444;
+}
+
+.requirement-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.requirement-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.requirement-status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.requirement-status.compliant {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+}
+
+.requirement-status.partial {
+  background: rgba(254, 199, 111, 0.15);
+  color: #fec76f;
+}
+
+.requirement-status.non_compliant {
+  background: rgba(255, 68, 68, 0.15);
+  color: #ff4444;
+}
+
+.requirement-desc {
+  font-size: 12px;
+  color: #888888;
+  margin: 0;
+}
+
+.requirement-gap {
+  font-size: 11px;
+  color: #ff9800;
+  margin: 8px 0 0 0;
+}
+
+/* Recommendations */
+.recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recommendation-item {
+  padding: 16px;
+  background: #000000;
+  border-radius: 8px;
+}
+
+.recommendation-item.high {
+  border-left: 3px solid #ff4444;
+}
+
+.recommendation-item.medium {
+  border-left: 3px solid #fec76f;
+}
+
+.recommendation-item.low {
+  border-left: 3px solid #4caf50;
+}
+
+.rec-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.priority-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.priority-badge.high {
+  background: rgba(255, 68, 68, 0.15);
+  color: #ff4444;
+}
+
+.priority-badge.medium {
+  background: rgba(254, 199, 111, 0.15);
+  color: #fec76f;
+}
+
+.priority-badge.low {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+}
+
+.rec-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.rec-description {
+  font-size: 12px;
+  color: #888888;
+  margin: 0 0 8px 0;
+}
+
+.rec-action {
+  font-size: 12px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.affected-projects {
+  font-size: 11px;
+  color: #666666;
+  margin-top: 8px;
+}
+
+/* Compliance Table */
+.compliance-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.compliance-table th,
+.compliance-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.compliance-table th {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #000000;
+}
+
+.compliance-table td {
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.status-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.status-badge.has-sbom {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+}
+
+.status-badge.no-sbom {
+  background: rgba(255, 68, 68, 0.15);
+  color: #ff4444;
+}
+
+.score.good {
+  color: #4caf50;
+}
+
+.score.needs-work {
+  color: #ff9800;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .compliance-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .format-options,
+  .type-options {
+    grid-template-columns: 1fr;
+  }
+
+  .vuln-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .compliance-score {
+    flex-direction: column;
+    gap: 20px;
+  }
+}

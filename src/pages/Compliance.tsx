@@ -74,10 +74,9 @@ export default function Compliance() {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const result = await response.json();
-      console.log('Projects response:', result);
       setProjects(result.projects || []);
     } catch (error) {
-      console.error('Failed to fetch projects:', error);
+      // Failed to fetch projects - silently ignore
     }
   };
 

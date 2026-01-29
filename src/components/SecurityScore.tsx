@@ -44,38 +44,31 @@ export const SecurityScoreCard: React.FC<SecurityScoreProps> = ({ projectId }) =
   }, [projectId]);
 
   const fetchScore = async () => {
-    console.log('🔍 Fetching security score for project:', projectId);
     try {
       const res = await fetch(`/api/v1/security-score/projects/${projectId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      
-      console.log('📡 Response status:', res.status, res.statusText);
-      
+
       if (!res.ok) {
-        const errorText = await res.text();
-        console.error('❌ Failed to fetch security score:', res.status, errorText);
         setScore(null);
         setLoading(false);
         return;
       }
-      
+
       const data = await res.json();
-      console.log('✅ Score data received:', data);
-      
+
       // Check if response has score property
       if (data && typeof data.score === 'number') {
         setScore(data);
       } else {
-        console.error('⚠️ Invalid score data:', data);
         setScore(null);
       }
       
       setLoading(false);
     } catch (error) {
-      console.error('💥 Exception fetching security score:', error);
+      // Error fetching security score
       setScore(null);
       setLoading(false);
     }
@@ -91,7 +84,7 @@ export const SecurityScoreCard: React.FC<SecurityScoreProps> = ({ projectId }) =
       const data = await res.json();
       setHistory(data.history || []);
     } catch (error) {
-      console.error('Failed to fetch score history:', error);
+      // Failed to fetch score history
     }
   };
 
@@ -107,7 +100,7 @@ export const SecurityScoreCard: React.FC<SecurityScoreProps> = ({ projectId }) =
       setScore(data);
       fetchHistory(); // Refresh history
     } catch (error) {
-      console.error('Failed to recalculate score:', error);
+      // Failed to recalculate score
     }
     setRecalculating(false);
   };
