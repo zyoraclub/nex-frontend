@@ -15,11 +15,22 @@ export default function ScanPolicies() {
   const [formData, setFormData] = useState({
     policy_name: '',
     description: '',
+    // Core Scanners
     vulnerability_scanner_enabled: true,
     llm_rag_scanner_enabled: true,
     model_provenance_scanner_enabled: true,
     container_scanner_enabled: true,
     sast_scanner_enabled: true,
+    model_poisoning_scanner_enabled: false,
+    dataset_poisoning_scanner_enabled: false,
+    // Advanced AI/ML Scanners
+    ml_security_scanner_enabled: true,
+    adversarial_robustness_scanner_enabled: false,
+    zero_day_scanner_enabled: true,
+    // Cloud ML Platform Scanners
+    sagemaker_scanner_enabled: true,
+    huggingface_scanner_enabled: true,
+    // Notifications
     notify_on_critical: true,
     notify_on_high: true,
     notify_on_medium: false,
@@ -72,11 +83,22 @@ export default function ScanPolicies() {
     setFormData({
       policy_name: '',
       description: '',
+      // Core Scanners
       vulnerability_scanner_enabled: true,
       llm_rag_scanner_enabled: true,
       model_provenance_scanner_enabled: true,
       container_scanner_enabled: true,
       sast_scanner_enabled: true,
+      model_poisoning_scanner_enabled: false,
+      dataset_poisoning_scanner_enabled: false,
+      // Advanced AI/ML Scanners
+      ml_security_scanner_enabled: true,
+      adversarial_robustness_scanner_enabled: false,
+      zero_day_scanner_enabled: true,
+      // Cloud ML Platform Scanners
+      sagemaker_scanner_enabled: true,
+      huggingface_scanner_enabled: true,
+      // Notifications
       notify_on_critical: true,
       notify_on_high: true,
       notify_on_medium: false,
@@ -168,6 +190,7 @@ export default function ScanPolicies() {
             <button onClick={() => handleCreateFromTemplate('production')}>Production Template</button>
             <button onClick={() => handleCreateFromTemplate('development')}>Development Template</button>
             <button onClick={() => handleCreateFromTemplate('compliance')}>Compliance Template</button>
+            <button onClick={() => handleCreateFromTemplate('ml_focused')}>ML/AI Security Template</button>
           </div>
         </div>
       )}
@@ -199,9 +222,12 @@ export default function ScanPolicies() {
               <div className="stat">
                 <span className="stat-label">Scanners</span>
                 <span className="stat-value">
-                  {[policy.vulnerability_scanner_enabled, policy.llm_rag_scanner_enabled, 
-                    policy.model_provenance_scanner_enabled, policy.container_scanner_enabled, 
-                    policy.sast_scanner_enabled].filter(Boolean).length}/5
+                  {[policy.vulnerability_scanner_enabled, policy.llm_rag_scanner_enabled,
+                    policy.model_provenance_scanner_enabled, policy.container_scanner_enabled,
+                    policy.sast_scanner_enabled, policy.model_poisoning_scanner_enabled,
+                    policy.dataset_poisoning_scanner_enabled, policy.ml_security_scanner_enabled,
+                    policy.adversarial_robustness_scanner_enabled, policy.zero_day_scanner_enabled,
+                    policy.sagemaker_scanner_enabled, policy.huggingface_scanner_enabled].filter(Boolean).length}/12
                 </span>
               </div>
               <div className="stat">
@@ -249,6 +275,8 @@ export default function ScanPolicies() {
 
                 <div className="form-section">
                   <h3>Scanner Configuration</h3>
+
+                  <h4 style={{ fontSize: '13px', color: '#fec76f', marginBottom: '12px', marginTop: '16px' }}>Core Scanners</h4>
                   <div className="checkbox-grid">
                     <label className="checkbox-label">
                       <input
@@ -289,6 +317,70 @@ export default function ScanPolicies() {
                         onChange={(e) => setFormData({ ...formData, sast_scanner_enabled: e.target.checked })}
                       />
                       SAST Scanner
+                    </label>
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={formData.model_poisoning_scanner_enabled}
+                        onChange={(e) => setFormData({ ...formData, model_poisoning_scanner_enabled: e.target.checked })}
+                      />
+                      Model Poisoning
+                    </label>
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={formData.dataset_poisoning_scanner_enabled}
+                        onChange={(e) => setFormData({ ...formData, dataset_poisoning_scanner_enabled: e.target.checked })}
+                      />
+                      Dataset Poisoning
+                    </label>
+                  </div>
+
+                  <h4 style={{ fontSize: '13px', color: '#fec76f', marginBottom: '12px', marginTop: '20px' }}>Advanced AI/ML Security</h4>
+                  <div className="checkbox-grid">
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={formData.ml_security_scanner_enabled}
+                        onChange={(e) => setFormData({ ...formData, ml_security_scanner_enabled: e.target.checked })}
+                      />
+                      ML Security Scanner
+                    </label>
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={formData.adversarial_robustness_scanner_enabled}
+                        onChange={(e) => setFormData({ ...formData, adversarial_robustness_scanner_enabled: e.target.checked })}
+                      />
+                      Adversarial Robustness
+                    </label>
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={formData.zero_day_scanner_enabled}
+                        onChange={(e) => setFormData({ ...formData, zero_day_scanner_enabled: e.target.checked })}
+                      />
+                      Zero-Day Threat Detection
+                    </label>
+                  </div>
+
+                  <h4 style={{ fontSize: '13px', color: '#fec76f', marginBottom: '12px', marginTop: '20px' }}>Cloud ML Platforms</h4>
+                  <div className="checkbox-grid">
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={formData.sagemaker_scanner_enabled}
+                        onChange={(e) => setFormData({ ...formData, sagemaker_scanner_enabled: e.target.checked })}
+                      />
+                      AWS SageMaker
+                    </label>
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={formData.huggingface_scanner_enabled}
+                        onChange={(e) => setFormData({ ...formData, huggingface_scanner_enabled: e.target.checked })}
+                      />
+                      HuggingFace Models
                     </label>
                   </div>
                 </div>
