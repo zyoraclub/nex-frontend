@@ -197,11 +197,31 @@
 .loading-state,
 .empty-findings {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 300px;
   color: #94a3b8;
   font-size: 14px;
+}
+
+.loading-state p {
+  margin-top: 16px;
+}
+
+.findings-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #1a1a1a;
+  border-top-color: #fec76f;
+  border-radius: 50%;
+  animation: findings-spin 0.8s linear infinite;
+}
+
+@keyframes findings-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .findings-list {

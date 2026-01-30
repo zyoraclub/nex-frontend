@@ -27,10 +27,12 @@ export default function ProjectDetails() {
   const [activeTab, setActiveTab] = useState('aibom');
   const [loading, setLoading] = useState(true);
   const [aibom, setAibom] = useState<AIBOM | null>(null);
+  const [aibomLoading, setAibomLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [pollInterval, setPollInterval] = useState<any>(null);
   const [scanRuns, setScanRuns] = useState<ScannerRun[]>([]);
   const [selectedRun, setSelectedRun] = useState<ScannerRun | null>(null);
+  const [scansLoading, setScansLoading] = useState(false);
   const [scanning, setScanning] = useState(false);
   const [showProgressDock, setShowProgressDock] = useState(false);
   const [activeScanId, setActiveScanId] = useState<number | null>(null);
@@ -69,6 +71,7 @@ export default function ProjectDetails() {
   };
 
   const fetchLatestAIBOM = async (projectId: number) => {
+    setAibomLoading(true);
     try {
       const response = await aibomAPI.listByProject(projectId);
       if (response.data.length > 0) {
@@ -79,6 +82,8 @@ export default function ProjectDetails() {
       }
     } catch (err) {
       console.error('Failed to fetch AIBOM');
+    } finally {
+      setAibomLoading(false);
     }
   };
 
@@ -103,6 +108,7 @@ export default function ProjectDetails() {
 
   const fetchScanRuns = async () => {
     if (!project) return;
+    setScansLoading(true);
     try {
       const response = await scannerAPI.getScanRuns(project.id);
       setScanRuns(response.data);
@@ -111,6 +117,8 @@ export default function ProjectDetails() {
       }
     } catch (err) {
       console.error('Failed to fetch scan runs');
+    } finally {
+      setScansLoading(false);
     }
   };
 
@@ -310,16 +318,23 @@ export default function ProjectDetails() {
           <div className="tab-content">
             <div className="content-header">
               <h2>AI Bill of Materials</h2>
-              <button 
-                className="btn-action" 
+              <button
+                className="btn-action"
                 onClick={handleGenerateAIBOM}
-                disabled={generating || (aibom?.status === 'processing')}
+                disabled={generating || (aibom?.status === 'processing') || aibomLoading}
               >
                 {generating || (aibom?.status === 'processing') ? 'Generating...' : 'Generate AIBOM'}
               </button>
             </div>
-            
-            {aibom?.status === 'processing' && (
+
+            {aibomLoading && (
+              <div className="loading-spinner-container">
+                <div className="loading-spinner"></div>
+                <p>Loading AIBOM data...</p>
+              </div>
+            )}
+
+            {!aibomLoading && aibom?.status === 'processing' && (
               <div className="progress-container">
                 <div className="progress-bar">
                   <div className="progress-fill" style={{ width: `${aibom.progress}%` }}></div>
@@ -328,7 +343,7 @@ export default function ProjectDetails() {
               </div>
             )}
 
-            {aibom?.status === 'completed' && aibom.assets && (
+            {!aibomLoading && aibom?.status === 'completed' && aibom.assets && (
               <div className="assets-container">
                 {(aibom as any).graph && (
                   <div className="graph-section">
@@ -387,14 +402,14 @@ export default function ProjectDetails() {
               </div>
             )}
 
-            {aibom?.status === 'failed' && (
+            {!aibomLoading && aibom?.status === 'failed' && (
               <div className="error-state">
                 <p>Failed to generate AIBOM</p>
                 <span>{aibom.error_message}</span>
               </div>
             )}
 
-            {!aibom && (
+            {!aibomLoading && !aibom && (
               <div className="empty-state">
                 <p>No AIBOM generated yet</p>
                 <span>Generate an AIBOM to discover AI/ML assets and dependencies</span>

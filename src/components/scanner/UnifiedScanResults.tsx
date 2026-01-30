@@ -154,7 +154,10 @@ export default function UnifiedScanResults({ run }: UnifiedScanResultsProps) {
 
         <div className="findings-panel">
           {loading ? (
-            <div className="loading-state">Loading findings...</div>
+            <div className="loading-state">
+              <div className="findings-spinner"></div>
+              <p>Loading findings...</p>
+            </div>
           ) : filteredFindings.length === 0 ? (
             <div className="empty-findings">
               <p>No findings in this category</p>
